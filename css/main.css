@@ -1,0 +1,17 @@
+.game {
+    width: 800px;
+    height: 600px;
+    background: url("../img/purple_background.png");
+    animation: scroll-background 5s linear infinite;
+    position: relative;
+}
+
+@keyframes scroll-background {
+    from {
+        background-position-y: 0px;
+    }
+    to {
+        background-position-y: 256px;
+    }
+    
+}
