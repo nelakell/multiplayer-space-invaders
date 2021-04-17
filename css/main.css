@@ -1,3 +1,32 @@
+header {
+    text-align: center;
+    background: #370a42;
+    color: #a672ba;
+    padding: 10px;
+}
+
+footer {
+    text-align: center;
+    background: #370a42;
+    color: #a672ba;
+    padding: 10px;
+    font-size: 11px;
+}
+
+.window-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.game-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #370a42;
+}
+
 .game {
     width: 800px;
     height: 600px;
@@ -8,10 +37,9 @@
 
 @keyframes scroll-background {
     from {
-        background-position-y: 0px;
+        background-position-y: 0;
     }
     to {
         background-position-y: 256px;
     }
-    
 }
