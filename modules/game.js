@@ -1,8 +1,7 @@
 import Player, {move} from "./player.js";
 
-const GAME_WIDTH = 800;
-const GAME_HEIGHT = 600;
-const PLAYER_IMG = "./img/playerShip1_red.png";
+export const GAME_WIDTH = 800;
+export const GAME_HEIGHT = 600;
 
 export default class Game {
     constructor() {
@@ -12,7 +11,7 @@ export default class Game {
     }
 
     createPlayer(name) {
-        return new Player(name, GAME_WIDTH / 2, GAME_HEIGHT - 50, PLAYER_IMG);
+        return new Player(name, GAME_WIDTH / 2, GAME_HEIGHT - 50);
     }
 
     onKeyDown(e) {
