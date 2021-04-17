@@ -6,6 +6,10 @@ const PLAYER_WIDTH = 20;
 const PLAYER_HEIGHT = 30;
 const PLAYER_IMG = "./img/playerShip1_red.png";
 
+export const PLAYER_STATE = {
+    lasers: []
+}
+
 export default class Player {
     constructor(name, xPos, yPos) {
         const $container = document.querySelector(".game");
@@ -21,34 +25,42 @@ export default class Player {
         this.yPos = yPos;
         this.player.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
     }
-}
 
-export function move($player, keyCode) {
-    switch (keyCode) {
-        case Constants.KEY_CODE_LEFT:
-            $player.xPos -= 5;
-            break;
-        case Constants.KEY_CODE_RIGHT:
-            $player.xPos += 5;
-            break;
-        case Constants.KEY_CODE_UP:
-            $player.yPos -= 5;
-            break;
-        case Constants.KEY_CODE_DOWN:
-            $player.yPos += 5;
-            break;
+    move(keyCode) {
+        switch (keyCode) {
+            case Constants.KEY_CODE_LEFT:
+                this.xPos -= 5;
+                break;
+            case Constants.KEY_CODE_RIGHT:
+                this.xPos += 5;
+                break;
+            case Constants.KEY_CODE_UP:
+                this.yPos -= 5;
+                break;
+            case Constants.KEY_CODE_DOWN:
+                this.yPos += 5;
+                break;
+        }
+        this.xPos = respectBoundaries(this.xPos, PLAYER_WIDTH, GAME_WIDTH - PLAYER_WIDTH);
+        this.yPos = respectBoundaries(this.yPos, 0, GAME_HEIGHT - PLAYER_HEIGHT);
+        setPosition(this.player, this.xPos, this.yPos)
     }
-    $player.xPos = respectBoundaries($player.xPos, PLAYER_WIDTH, GAME_WIDTH - PLAYER_WIDTH);
-    $player.yPos = respectBoundaries($player.yPos, 0, GAME_HEIGHT - PLAYER_HEIGHT);
-    setPosition($player.player, $player.xPos, $player.yPos)
-}
 
-export function shoot(source) {
-    const $container = document.querySelector(".game");
-    const laser = new Laser(source.xPos - 5, source.yPos - 35);
-    $container.appendChild(laser.laser);
-    GAME_STATE.lasers.push(laser);
-    setPosition(laser.laser, laser.xPos, laser.yPos);
+    shoot() {
+        const $container = document.querySelector(".game");
+        const laser = new Laser(Date.now(), this.xPos - 5, this.yPos - 35);
+        $container.appendChild(laser.laser);
+        PLAYER_STATE.lasers.push(laser);
+        setPosition(laser.laser, laser.xPos, laser.yPos);
+    }
+
+    update(timePassed) {
+        const lasers = PLAYER_STATE.lasers;
+        for (let i = 0; i < lasers.length; i++) {
+            const laser = lasers[i];
+            laser.move(timePassed);
+        }
+    }
 }
 
 function setPosition($el, x, y) {
