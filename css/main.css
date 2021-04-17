@@ -46,6 +46,12 @@ footer {
     position: relative;
 }
 
+.game .player {
+    position: absolute;
+    margin-left: -20px;
+    width: 40px;
+}
+
 @keyframes scroll-background {
     from {
         background-position-y: 0;
