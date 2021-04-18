@@ -1,5 +1,6 @@
 import Player from "./player.js";
 import {PLAYER_MOVEMENTS, PLAYER_SHOOT} from "./constants.js";
+import EnemiesEngine from "./enemiesEngine.js";
 
 export const GAME_WIDTH = 800;
 export const GAME_HEIGHT = 600;
@@ -11,6 +12,8 @@ export const GAME_STATE = {
 export default class Game {
     constructor() {
         this.player = new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50);
+        this.enemiesFleet = new EnemiesEngine("enemy");
+        this.enemiesFleet.updateEnemies();
     }
 
     onKeyDown(e) {
