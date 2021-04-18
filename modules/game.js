@@ -12,8 +12,7 @@ export const GAME_STATE = {
 export default class Game {
     constructor() {
         this.player = new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50);
-        this.enemiesFleet = new EnemiesEngine("enemy");
-        this.enemiesFleet.updateEnemies();
+        this.enemiesFleet = new EnemiesEngine();
     }
 
     onKeyDown(e) {
@@ -29,6 +28,7 @@ export default class Game {
         const timePassed = (currentTime - GAME_STATE.lastTime) / 1000.0;
 
         this.player.update(timePassed)
+        this.enemiesFleet.updateEnemies();
 
         GAME_STATE.lastTime = currentTime;
     }
