@@ -1,5 +1,5 @@
 import * as Constants from "./constants.js";
-import {GAME_HEIGHT, GAME_STATE, GAME_WIDTH} from "./game.js";
+import {GAME_HEIGHT, GAME_WIDTH} from "./game.js";
 import Laser from "./laser.js";
 
 const PLAYER_WIDTH = 20;
@@ -58,8 +58,17 @@ export default class Player {
         const lasers = PLAYER_STATE.lasers;
         for (let i = 0; i < lasers.length; i++) {
             const laser = lasers[i];
-            laser.move(timePassed);
+            if (!laser.move(timePassed)) {
+                removeLaser(laser);
+            }
         }
+    }
+}
+
+function removeLaser(n) {
+    const index = PLAYER_STATE.lasers.indexOf(n);
+    if (index > -1) {
+        PLAYER_STATE.lasers.splice(index, 1);
     }
 }
 

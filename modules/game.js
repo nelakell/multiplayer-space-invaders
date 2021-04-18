@@ -11,8 +11,10 @@ export const GAME_STATE = {
 
 export default class Game {
     constructor() {
+        this.$container = document.querySelector(".game");
         this.player = new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50);
         this.enemiesFleet = new EnemiesEngine();
+        this.$container.appendChild(this.enemiesFleet.$enemiesContainer);
     }
 
     onKeyDown(e) {

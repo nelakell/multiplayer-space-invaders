@@ -2,9 +2,7 @@ const ENEMY_IMG = "./img/enemyGreen1.png";
 
 export default class Enemy {
     constructor(xPos, yPos) {
-        const $container = document.querySelector(".game");
         this.initEnemy(xPos, yPos);
-        $container.appendChild(this.$enemy)
     }
 
     initEnemy(xPos, yPos) {

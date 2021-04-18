@@ -17,9 +17,16 @@ export default class Laser {
     }
 
     move(time) {
-        this.yPos -= time * LASER_MAX_SPEED;
-        this.yPos = this.respectBoundaries(this.yPos, 0);
-        this.setPosition(this.xPos, this.yPos);
+        let yPos = this.yPos - time * LASER_MAX_SPEED;
+        if (this.respectBoundaries(this.yPos, 0)) {
+            this.yPos = yPos;
+            this.setPosition(this.xPos, this.yPos);
+            return true;
+        } else {
+            const $container = document.querySelector(".game");
+            $container.removeChild(this.laser);
+            return false;
+        }
     }
 
     setPosition(x, y) {
@@ -27,24 +34,6 @@ export default class Laser {
     }
 
     respectBoundaries(v, min) {
-        if (v < min) {
-            const $container = document.querySelector(".game");
-            $container.removeChild(this.laser);
-        } else {
-            return v;
-        }
+        return v >= min;
     }
-}
-
-
-function createLaser($container, x, y) {
-    const $element = document.createElement("img");
-    $element.src = "img/laser-blue-1.png";
-    $element.className = "laser";
-    $container.appendChild($element);
-    const laser = { x, y, $element };
-    GAME_STATE.lasers.push(laser);
-    const audio = new Audio("sound/sfx-laser1.ogg");
-    audio.play();
-    setPosition($element, x, y);
 }

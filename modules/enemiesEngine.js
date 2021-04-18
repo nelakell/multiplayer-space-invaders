@@ -12,12 +12,10 @@ export const ENEMIES_STATE = {
 
 export default class EnemiesEngine {
     constructor() {
-        const $container = document.querySelector(".game");
         this.$enemiesContainer = document.createElement("div");
         this.xPos = 0;
         this.yPos = 0;
         createEnemies(this.$enemiesContainer);
-        $container.appendChild(this.$enemiesContainer)
     }
 
     updateEnemies() {
@@ -48,7 +46,7 @@ function createEnemies($enemiesContainer) {
     }
 }
 
-function respectBoundaries(v, min, max) {
+export function respectBoundaries(v, min, max) {
     if (v < min) {
         return min;
     } else if (v > max) {
