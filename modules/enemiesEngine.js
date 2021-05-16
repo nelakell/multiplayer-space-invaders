@@ -22,13 +22,23 @@ export default class EnemiesEngine {
         const dx = Math.sin(GAME_STATE.lastTime / 1000.0);
         const dy = Math.cos(GAME_STATE.lastTime / 1000.0);
 
-        this.xPos = respectBoundaries(this.xPos += dx, 0, ENEMY_HORIZONTAL_PADDING);
-        this.yPos = respectBoundaries(this.yPos += dy, 0, (GAME_HEIGHT / 3 * 2) - (ENEMY_ROWS * ENEMY_VERTICAL_SPACING));
+        this.xPos = this.respectBoundaries(this.xPos += dx, 0, ENEMY_HORIZONTAL_PADDING);
+        this.yPos = this.respectBoundaries(this.yPos += dy, 0, (GAME_HEIGHT / 3 * 2) - (ENEMY_ROWS * ENEMY_VERTICAL_SPACING));
         this.setPosition(this.$enemiesContainer, this.xPos, this.yPos)
     }
 
     setPosition($el, x, y) {
         $el.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    respectBoundaries(newPos, minPos, maxPos) {
+        if (newPos < minPos) {
+            return minPos;
+        } else if (newPos > maxPos) {
+            return maxPos;
+        } else {
+            return newPos;
+        }
     }
 
 }
@@ -43,15 +53,5 @@ function createEnemies($enemiesContainer) {
             ENEMIES_STATE.enemies.push(enemy);
             $enemiesContainer.appendChild(enemy.$enemy)
         }
-    }
-}
-
-export function respectBoundaries(v, min, max) {
-    if (v < min) {
-        return min;
-    } else if (v > max) {
-        return max;
-    } else {
-        return v;
     }
 }
