@@ -48,7 +48,7 @@ export default class Player {
 
     shoot() {
         const $container = document.querySelector(".game");
-        const laser = new Laser(Date.now(), this.xPos - 5, this.yPos - 35);
+        const laser = new Laser(Date.now(), this.xPos, this.yPos);
         $container.appendChild(laser.laser);
         PLAYER_STATE.lasers.push(laser);
         setPosition(laser.laser, laser.xPos, laser.yPos);
