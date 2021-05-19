@@ -1,6 +1,10 @@
 import Player from "./player.js";
 import {PLAYER_MOVEMENTS, PLAYER_SHOOT} from "./constants.js";
 import EnemiesEngine from "./enemiesEngine.js";
+import {PLAYER_STATE} from "./player.js";
+import {removeLaser} from "./player.js";
+import {ENEMIES_STATE} from "./enemiesEngine.js";
+import {removeEnemy} from "./enemiesEngine.js";
 
 export const GAME_WIDTH = 800;
 export const GAME_HEIGHT = 600;
@@ -31,7 +35,33 @@ export default class Game {
 
         this.player.update(timePassed)
         this.enemiesFleet.updateEnemies();
+        this.checkForCollisions();
 
         GAME_STATE.lastTime = currentTime;
     }
+
+    checkForCollisions(){
+        for(let i =0; i < PLAYER_STATE.lasers.length; i++){
+            const laser = PLAYER_STATE.lasers[i];
+            const rect1 = laser.laser.getBoundingClientRect();
+            for(let j = 0; j < ENEMIES_STATE.enemies.length; j++){
+                const enemy = ENEMIES_STATE.enemies[j];
+                const rect2 = enemy.$enemy.getBoundingClientRect();
+                if(rectsIntersect(rect1, rect2)){
+                    removeLaser(laser);
+                    removeEnemy(enemy);
+                }
+            }
+        }
+    }
+
+}
+
+function rectsIntersect(rect1, rect2){
+    return !(
+        rect2.left > rect1.right ||
+        rect2.right < rect1.left ||
+        rect2.top > rect1.bottom ||
+        rect2.bottom < rect1.top
+    );
 }

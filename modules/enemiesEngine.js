@@ -13,6 +13,7 @@ export const ENEMIES_STATE = {
 export default class EnemiesEngine {
     constructor() {
         this.$enemiesContainer = document.createElement("div");
+        this.$enemiesContainer.className = "enemiesContainer";
         this.xPos = 0;
         this.yPos = 0;
         createEnemies(this.$enemiesContainer);
@@ -53,5 +54,14 @@ function createEnemies($enemiesContainer) {
             ENEMIES_STATE.enemies.push(enemy);
             $enemiesContainer.appendChild(enemy.$enemy)
         }
+    }
+}
+
+export function removeEnemy(enemyObj) {
+    const index = ENEMIES_STATE.enemies.indexOf(enemyObj);
+    if (index > -1) {
+        ENEMIES_STATE.enemies.splice(index, 1);
+        const $enemiesContainer = document.querySelector(".enemiesContainer");
+        $enemiesContainer.removeChild(enemyObj.$enemy);
     }
 }

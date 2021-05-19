@@ -57,18 +57,17 @@ export default class Player {
     update(timePassed) {
         const lasers = PLAYER_STATE.lasers;
         for (let i = 0; i < lasers.length; i++) {
-            const laser = lasers[i];
-            if (!laser.move(timePassed)) {
-                removeLaser(laser);
-            }
+            lasers[i].update(timePassed);
         }
     }
 }
 
-function removeLaser(n) {
-    const index = PLAYER_STATE.lasers.indexOf(n);
+export function removeLaser(laserObj) {
+    const index = PLAYER_STATE.lasers.indexOf(laserObj);
     if (index > -1) {
         PLAYER_STATE.lasers.splice(index, 1);
+        const $container = document.querySelector(".game");
+        $container.removeChild(laserObj.laser);
     }
 }
 
