@@ -5,6 +5,7 @@ import {PLAYER_STATE} from "./player.js";
 import {removeLaser} from "./player.js";
 import {ENEMIES_STATE} from "./enemiesEngine.js";
 import {removeEnemy} from "./enemiesEngine.js";
+import {move} from "./bonus.js"
 
 export const GAME_WIDTH = 800;
 export const GAME_HEIGHT = 600;
@@ -15,10 +16,8 @@ export const GAME_STATE = {
 
 export default class Game {
     constructor() {
-        this.$container = document.querySelector(".game");
         this.player = new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50);
         this.enemiesFleet = new EnemiesEngine();
-        this.$container.appendChild(this.enemiesFleet.$enemiesContainer);
     }
 
     onKeyDown(e) {
@@ -35,12 +34,13 @@ export default class Game {
 
         this.player.update(timePassed)
         this.enemiesFleet.updateEnemies();
-        this.checkForCollisions();
+        // TO-DO: bonusMove()
+        this.checkForEnemyHit();
 
         GAME_STATE.lastTime = currentTime;
     }
 
-    checkForCollisions(){
+    checkForEnemyHit(){
         for(let i =0; i < PLAYER_STATE.lasers.length; i++){
             const laser = PLAYER_STATE.lasers[i];
             const rect1 = laser.laser.getBoundingClientRect();
@@ -53,6 +53,14 @@ export default class Game {
                 }
             }
         }
+    }
+
+    checkForPlayerHit(){
+
+    }
+
+    checkForBonusHit(){
+
     }
 
 }

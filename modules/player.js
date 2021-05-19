@@ -77,8 +77,10 @@ function setPosition($el, x, y) {
 
 function respectBoundaries(v, min, max) {
     if (v < min) {
+        console.log("MINIMUM REACHED")
         return min;
     } else if (v > max) {
+        console.log("MAXIMUM REACHED")
         return max;
     } else {
         return v;
