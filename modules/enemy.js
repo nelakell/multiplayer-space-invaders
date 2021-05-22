@@ -49,9 +49,10 @@ export default class Enemy {
             const rect2 = this.$enemy.getBoundingClientRect();
             if (rectsIntersect(rect1, rect2)) {
                 laser.remove(PLAYER_STATE.lasers, laser);
-                const bonus = this.remove();
-                if (bonus !== undefined) {
-                    GAME_STATE.bonus.push(bonus);
+                const bonus = this.bonus
+                this.remove();
+                if (bonus) {
+                    GAME_STATE.bonus.push(new Bonus(this.xPos, this.yPos));
                 }
             }
         }
@@ -59,16 +60,11 @@ export default class Enemy {
 
     remove() {
         const index = ENEMIES_STATE.enemies.indexOf(this);
-        let bonus = undefined;
         if (index > -1) {
-            if (this.bonus) {
-                bonus = new Bonus(this.xPos, this.yPos);
-            }
             ENEMIES_STATE.enemies.splice(index, 1);
             const $container = document.querySelector(".game");
             $container.removeChild(this.$enemy);
         }
-        return bonus;
     }
 
 }
