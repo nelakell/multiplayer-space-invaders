@@ -2,11 +2,20 @@ import * as ee from "../modules/enemiesEngine.js";
 import EnemiesEngine from "../modules/enemiesEngine.js";
 
 
-ee.respectBoundaries = jest.fn((x, y, z) => x + y + z);
-
-test('update enemies', () => {
+test('new value respects boundaries', () =>{
     let enemiesEngine = new EnemiesEngine();
-    console.log(enemiesEngine.$enemiesContainer.style.transform)
-    enemiesEngine.updateEnemies();
-    console.log(enemiesEngine.$enemiesContainer.style.transform)
+    let res = enemiesEngine.respectBoundaries(1,0,5);
+    expect(res).toBe(1);
+})
+
+test('new value exceeds min boundaries', () =>{
+    let enemiesEngine = new EnemiesEngine();
+    let res = enemiesEngine.respectBoundaries(-1,0,5);
+    expect(res).toBe(0);
+})
+
+test('new value exceeds max boundaries', () =>{
+    let enemiesEngine = new EnemiesEngine();
+    let res = enemiesEngine.respectBoundaries(6,0,5);
+    expect(res).toBe(5);
 })
