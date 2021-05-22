@@ -61,12 +61,14 @@ function createEnemies() {
 
 export function removeEnemy(enemyObj) {
     const index = ENEMIES_STATE.enemies.indexOf(enemyObj);
+    let bonus = undefined;
     if (index > -1) {
         if(enemyObj.bonus){
-            new Bonus(enemyObj.xPos, enemyObj.yPos);
+            bonus = new Bonus(enemyObj.xPos, enemyObj.yPos);
         }
         ENEMIES_STATE.enemies.splice(index, 1);
         const $container = document.querySelector(".game");
         $container.removeChild(enemyObj.$enemy);
     }
+    return bonus;
 }
