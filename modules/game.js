@@ -12,13 +12,14 @@ export const GAME_STATE = {
     upKeyPressed: false,
     downKeyPressed: false,
     spaceKeyPressed: false,
+    player: new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50),
+    bonus: []
 }
 
 export default class Game {
     constructor() {
-        this.player = new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50);
+        this.player = GAME_STATE.player;
         this.enemiesFleet = new EnemiesEngine();
-        this.bonus = []
     }
 
     update() {
@@ -26,9 +27,9 @@ export default class Game {
         const timePassed = (currentTime - GAME_STATE.lastTime) / 1000.0;
 
         this.player.update(timePassed)
-        this.enemiesFleet.update(this, timePassed);
-        for (let i = 0; i < this.bonus.length; i++) {
-            this.bonus[i].update(this, timePassed);
+        this.enemiesFleet.update(timePassed);
+        for (let i = 0; i < GAME_STATE.bonus.length; i++) {
+            GAME_STATE.bonus[i].update(timePassed);
         }
 
         GAME_STATE.lastTime = currentTime;
@@ -82,4 +83,8 @@ export function rectsIntersect(rect1, rect2) {
         rect2.top > rect1.bottom ||
         rect2.bottom < rect1.top
     );
+}
+
+export function setPosition($el, x, y) {
+    $el.style.transform = `translate(${x}px, ${y}px)`;
 }

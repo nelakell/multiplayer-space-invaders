@@ -1,4 +1,4 @@
-import {GAME_HEIGHT} from "./game.js";
+import {GAME_HEIGHT, setPosition} from "./game.js";
 import {PLAYER_STATE} from "./player.js";
 
 const LASER_IMG = "img/laserRed07.png";
@@ -32,7 +32,8 @@ export default class Laser {
     moveUp(timePassed) {
         let yPos = this.yPos - timePassed * LASER_MAX_SPEED;
         if (this.respectBoundaries(yPos - LASER_HEIGHT, 0)) {
-            this.setPosition(yPos);
+            this.yPos = yPos;
+            setPosition(this.laser, this.xPos, this.yPos);
             return true;
         }
         return false;
@@ -41,7 +42,8 @@ export default class Laser {
     moveDown(timePassed) {
         let yPos = this.yPos + timePassed * LASER_MAX_SPEED;
         if (this.respectBoundaries(yPos + LASER_HEIGHT, GAME_HEIGHT)) {
-            this.setPosition(yPos);
+            this.yPos = yPos;
+            setPosition(this.laser, this.xPos, this.yPos);
             return true;
         }
         return false;
@@ -54,11 +56,6 @@ export default class Laser {
             const $container = document.querySelector(".game");
             $container.removeChild(laserObj.laser);
         }
-    }
-
-    setPosition(y) {
-        this.yPos = y;
-        this.laser.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
     }
 
     respectBoundaries(v, min) {

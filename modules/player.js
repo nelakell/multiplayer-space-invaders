@@ -1,4 +1,4 @@
-import {GAME_HEIGHT, GAME_STATE, GAME_WIDTH, respectBoundaries} from "./game.js";
+import {GAME_HEIGHT, GAME_STATE, GAME_WIDTH, respectBoundaries, setPosition} from "./game.js";
 import Laser from "./laser.js";
 
 const PLAYER_WIDTH = 20;
@@ -15,16 +15,17 @@ export default class Player {
     constructor(name, xPos, yPos) {
         const $container = document.querySelector(".game");
         this.initPlayer(name, xPos, yPos);
-        $container.appendChild(this.player)
+        $container.appendChild(this.$player)
     }
 
     initPlayer(name, xPos, yPos) {
-        this.player = document.createElement("img");
-        this.player.src = PLAYER_IMG;
-        this.player.className = name;
+        this.$player = document.createElement("img");
+        this.$player.src = PLAYER_IMG;
+        this.$player.className = "player";
+        this.name = name;
         this.xPos = xPos;
         this.yPos = yPos;
-        this.player.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
+        this.$player.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
     }
 
     move() {
@@ -39,7 +40,7 @@ export default class Player {
         }
         this.xPos = respectBoundaries(this.xPos, PLAYER_WIDTH, GAME_WIDTH - PLAYER_WIDTH);
         this.yPos = respectBoundaries(this.yPos, 0, GAME_HEIGHT - PLAYER_HEIGHT);
-        setPosition(this.player, this.xPos, this.yPos)
+        setPosition(this.$player, this.xPos, this.yPos)
     }
 
     shoot(timepassed) {
@@ -70,8 +71,4 @@ export default class Player {
         // TODO
     }
 
-}
-
-function setPosition($el, x, y) {
-    $el.style.transform = `translate(${x}px, ${y}px)`;
 }

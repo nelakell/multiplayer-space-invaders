@@ -1,4 +1,4 @@
-import {GAME_HEIGHT, rectsIntersect} from "./game.js";
+import {GAME_HEIGHT, GAME_STATE, rectsIntersect, setPosition} from "./game.js";
 
 const BONUS_IMG = "img/bolt_gold.png";
 const BONUS_MAX_SPEED = 100;
@@ -17,10 +17,10 @@ export default class Bonus {
         $container.appendChild(this.bonus);
     }
 
-    update(game, timePassed) {
-        this.detectHit(game);
+    update(timePassed) {
+        this.detectHit();
         if (!this.move(timePassed)) {
-            this.remove(game);
+            this.remove();
         }
     }
 
@@ -28,33 +28,29 @@ export default class Bonus {
         let yPos = this.yPos + timePassed * BONUS_MAX_SPEED;
         if (this.respectBoundaries(this.yPos + BONUS_HEIGHT, GAME_HEIGHT)) {
             this.yPos = yPos;
-            this.setPosition(this.xPos, this.yPos);
+            setPosition(this.bonus, this.xPos, this.yPos);
             return true;
         }
         return false;
     }
 
-    remove(game) {
-        const index = game.bonus.indexOf(this);
+    remove() {
+        const index = GAME_STATE.bonus.indexOf(this);
         if (index > -1) {
-            game.bonus.splice(index, 1);
+            GAME_STATE.bonus.splice(index, 1);
             const $container = document.querySelector(".game");
             $container.removeChild(this.bonus);
         }
     }
 
-    detectHit(game) {
+    detectHit() {
         const rect1 = this.bonus.getBoundingClientRect();
-        const rect2 = game.player.player.getBoundingClientRect();
+        const rect2 = GAME_STATE.player.$player.getBoundingClientRect();
         if (rectsIntersect(rect1, rect2)) {
             // TODO: process bonus on player
-            this.remove(game);
+            this.remove();
         }
 
-    }
-
-    setPosition(x, y) {
-        this.bonus.style.transform = `translate(${x}px, ${y}px)`;
     }
 
     respectBoundaries(v, max) {

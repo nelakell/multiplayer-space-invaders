@@ -15,10 +15,10 @@ export default class EnemiesEngine {
         createEnemies();
     }
 
-    update(game, timepassed) {
+    update(timepassed) {
         for (let i = 0; i < ENEMIES_STATE.enemies.length; i++) {
             let enemy = ENEMIES_STATE.enemies[i];
-            enemy.update(game);
+            enemy.update();
             const lasers = enemy.lasers;
             for (let l = 0; l < lasers.length; l++) {
                 const laser = lasers[i];
