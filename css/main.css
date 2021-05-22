@@ -46,10 +46,22 @@ footer {
     position: absolute;
 }
 
-.game .player {
+.game .player{
     position: absolute;
     margin-left: -20px;
     margin-bottom: +15px;
+    width: 40px;
+    height: 30px;
+}
+
+.player .spaceship{
+    position: absolute;
+    width: 40px;
+    height: 30px;
+}
+
+.player .damage{
+    position: absolute;
     width: 40px;
     height: 30px;
 }

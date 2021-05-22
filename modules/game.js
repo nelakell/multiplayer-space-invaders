@@ -1,4 +1,4 @@
-import Player from "./player.js";
+import Player, {PLAYER_STATE} from "./player.js";
 import {KEY_CODE_DOWN, KEY_CODE_LEFT, KEY_CODE_RIGHT, KEY_CODE_UP, PLAYER_SHOOT} from "./constants.js";
 import EnemiesEngine from "./enemiesEngine.js";
 
@@ -27,6 +27,10 @@ export default class Game {
         const timePassed = (currentTime - GAME_STATE.lastTime) / 1000.0;
 
         this.player.update(timePassed)
+        console.log(PLAYER_STATE.lives)
+        if (PLAYER_STATE.lives <0){
+            prompt("GAME OVER")
+        }
         this.enemiesFleet.update(timePassed);
         for (let i = 0; i < GAME_STATE.bonus.length; i++) {
             GAME_STATE.bonus[i].update(timePassed);
