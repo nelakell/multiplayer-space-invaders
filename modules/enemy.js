@@ -28,6 +28,7 @@ export default class Enemy {
 
     update(timePassed) {
         this.detectHit();
+        this.detectCollision();
         this.move(timePassed);
         this.shoot();
     }
@@ -71,6 +72,21 @@ export default class Enemy {
                 if (bonus) {
                     GAME_STATE.bonus.push(new Bonus(this.xPos, this.yPos));
                 }
+            }
+        }
+    }
+
+    detectCollision() {
+        for (let i = 0; i < ENEMIES_STATE.enemies.length; i++) {
+            const enemy = ENEMIES_STATE.enemies[i];
+            if(enemy === this){
+                continue;
+            }
+            const rect1 = enemy.$enemy.getBoundingClientRect();
+            const rect2 = this.$enemy.getBoundingClientRect();
+            if (rectsIntersect(rect1, rect2)) {
+                this.xDir *= -1;
+                this.yDir *= -1;
             }
         }
     }

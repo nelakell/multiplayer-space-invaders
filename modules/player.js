@@ -86,6 +86,15 @@ export default class Player {
                 laser.remove(ENEMIES_STATE.lasers, laser);
             }
         }
+        for (let i = 0; i < ENEMIES_STATE.enemies.length; i++) {
+            const enemy = ENEMIES_STATE.enemies[i];
+            const rect1 = enemy.$enemy.getBoundingClientRect();
+            const rect2 = this.$player.getBoundingClientRect();
+            if (rectsIntersect(rect1, rect2)) {
+                this.processHit();
+                enemy.remove(ENEMIES_STATE.enemies, enemy);
+            }
+        }
     }
 
     processHit() {
