@@ -43,7 +43,7 @@ footer {
     height: 600px;
     background: url("../img/purple_background.png");
     animation: scroll-background 5s linear infinite;
-    position: relative;
+    position: absolute;
 }
 
 .game .player {
@@ -52,6 +52,12 @@ footer {
     margin-bottom: +15px;
     width: 40px;
     height: 30px;
+}
+
+.game .bonus {
+    position: absolute;
+    margin-left: +20px;
+    margin-bottom: +15px;
 }
 
 @keyframes scroll-background {

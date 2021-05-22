@@ -5,11 +5,10 @@ const LASER_MAX_SPEED = 300;
 const LASER_HEIGHT = 20;
 
 export default class Laser {
-    constructor(id, xPos, yPos) {
+    constructor(xPos, yPos) {
         this.laser = document.createElement("img");
         this.laser.src = LASER_IMG;
         this.laser.className = "laser";
-        this.laser.id = id;
         this.xPos = xPos;
         this.yPos = yPos;
         this.laser.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;

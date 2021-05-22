@@ -1,13 +1,14 @@
-import * as Constants from "./constants.js";
-import {GAME_HEIGHT, GAME_WIDTH} from "./game.js";
+import {GAME_HEIGHT, GAME_STATE, GAME_WIDTH} from "./game.js";
 import Laser from "./laser.js";
 
 const PLAYER_WIDTH = 20;
 const PLAYER_HEIGHT = 30;
 const PLAYER_IMG = "./img/playerShip1_red.png";
+const SHOOT_COOLDOWN = 1
 
 export const PLAYER_STATE = {
-    lasers: []
+    lasers: [],
+    cooldown: 0
 }
 
 export default class Player {
@@ -26,35 +27,38 @@ export default class Player {
         this.player.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
     }
 
-    move(keyCode) {
-        switch (keyCode) {
-            case Constants.KEY_CODE_LEFT:
-                this.xPos -= 5;
-                break;
-            case Constants.KEY_CODE_RIGHT:
-                this.xPos += 5;
-                break;
-            case Constants.KEY_CODE_UP:
-                this.yPos -= 5;
-                break;
-            case Constants.KEY_CODE_DOWN:
-                this.yPos += 5;
-                break;
+    move(timepassed) {
+        if (GAME_STATE.leftKeyPressed) {
+            this.xPos -= 5;
+        } else if (GAME_STATE.rightKeyPressed) {
+            this.xPos += 5;
+        } else if (GAME_STATE.upKeyPressed) {
+            this.yPos -= 5;
+        } else if (GAME_STATE.downKeyPressed) {
+            this.yPos += 5;
         }
         this.xPos = respectBoundaries(this.xPos, PLAYER_WIDTH, GAME_WIDTH - PLAYER_WIDTH);
         this.yPos = respectBoundaries(this.yPos, 0, GAME_HEIGHT - PLAYER_HEIGHT);
         setPosition(this.player, this.xPos, this.yPos)
     }
 
-    shoot() {
-        const $container = document.querySelector(".game");
-        const laser = new Laser(Date.now(), this.xPos, this.yPos);
-        $container.appendChild(laser.laser);
-        PLAYER_STATE.lasers.push(laser);
-        setPosition(laser.laser, laser.xPos, laser.yPos);
+    shoot(timepassed) {
+        PLAYER_STATE.cooldown -= timepassed;
+        if (GAME_STATE.spaceKeyPressed && PLAYER_STATE.cooldown <= 0) {
+            const $container = document.querySelector(".game");
+            const laser = new Laser(this.xPos, this.yPos);
+            $container.appendChild(laser.laser);
+            PLAYER_STATE.lasers.push(laser);
+            setPosition(laser.laser, laser.xPos, laser.yPos);
+            PLAYER_STATE.cooldown += SHOOT_COOLDOWN;
+        }else if (PLAYER_STATE.cooldown < 0) {
+            PLAYER_STATE.cooldown = 0;
+        }
     }
 
     update(timePassed) {
+        this.move(timePassed);
+        this.shoot(timePassed);
         const lasers = PLAYER_STATE.lasers;
         for (let i = 0; i < lasers.length; i++) {
             lasers[i].update(timePassed);
@@ -77,8 +81,10 @@ function setPosition($el, x, y) {
 
 function respectBoundaries(v, min, max) {
     if (v < min) {
+        console.log("MINIMUM REACHED")
         return min;
     } else if (v > max) {
+        console.log("MAXIMUM REACHED")
         return max;
     } else {
         return v;
