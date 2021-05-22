@@ -40,11 +40,14 @@ export default class Player {
     move() {
         if (GAME_STATE.leftKeyPressed) {
             this.xPos -= 5;
-        } else if (GAME_STATE.rightKeyPressed) {
+        }
+        if (GAME_STATE.rightKeyPressed) {
             this.xPos += 5;
-        } else if (GAME_STATE.upKeyPressed) {
+        }
+        if (GAME_STATE.upKeyPressed) {
             this.yPos -= 5;
-        } else if (GAME_STATE.downKeyPressed) {
+        }
+        if (GAME_STATE.downKeyPressed) {
             this.yPos += 5;
         }
         this.xPos = respectBoundaries(this.xPos, PLAYER_WIDTH, GAME_WIDTH - PLAYER_WIDTH);
