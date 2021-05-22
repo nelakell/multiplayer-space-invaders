@@ -1,5 +1,5 @@
 import Player, {PLAYER_STATE, removeLaser} from "./player.js";
-import {PLAYER_MOVEMENTS, PLAYER_SHOOT} from "./constants.js";
+import {KEY_CODE_DOWN, KEY_CODE_LEFT, KEY_CODE_RIGHT, KEY_CODE_UP, PLAYER_SHOOT} from "./constants.js";
 import EnemiesEngine, {ENEMIES_STATE, removeEnemy} from "./enemiesEngine.js";
 
 export const GAME_WIDTH = 800;
@@ -7,7 +7,12 @@ export const GAME_HEIGHT = 600;
 
 export const GAME_STATE = {
     lastTime: Date.now(),
-    bonus: []
+    bonus: [],
+    leftKeyPressed: false,
+    rightKeyPressed: false,
+    upKeyPressed: false,
+    downKeyPressed: false,
+    spaceKeyPressed: false,
 }
 
 export default class Game {
@@ -17,10 +22,30 @@ export default class Game {
     }
 
     onKeyDown(e) {
-        if (PLAYER_MOVEMENTS.includes(e.keyCode)) {
-            this.player.move(e.keyCode)
-        } else if (PLAYER_SHOOT === e.keyCode) {
-            this.player.shoot();
+        if (e.keyCode === KEY_CODE_LEFT) {
+            GAME_STATE.leftKeyPressed = true;
+        } else if (e.keyCode === KEY_CODE_RIGHT) {
+            GAME_STATE.rightKeyPressed = true;
+        } else if (e.keyCode === KEY_CODE_UP) {
+            GAME_STATE.upKeyPressed = true;
+        } else if (e.keyCode === KEY_CODE_DOWN) {
+            GAME_STATE.downKeyPressed = true;
+        } else if (e.keyCode === PLAYER_SHOOT) {
+            GAME_STATE.spaceKeyPressed = true;
+        }
+    }
+
+    onKeyUp(e) {
+        if (e.keyCode === KEY_CODE_LEFT) {
+            GAME_STATE.leftKeyPressed = false;
+        } else if (e.keyCode === KEY_CODE_RIGHT) {
+            GAME_STATE.rightKeyPressed = false;
+        } else if (e.keyCode === KEY_CODE_UP) {
+            GAME_STATE.upKeyPressed = false;
+        } else if (e.keyCode === KEY_CODE_DOWN) {
+            GAME_STATE.downKeyPressed = false;
+        } else if (e.keyCode === PLAYER_SHOOT) {
+            GAME_STATE.spaceKeyPressed = false;
         }
     }
 
