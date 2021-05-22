@@ -27,7 +27,6 @@ export default class Game {
         const timePassed = (currentTime - GAME_STATE.lastTime) / 1000.0;
 
         this.player.update(timePassed)
-        console.log(PLAYER_STATE.lives)
         if (PLAYER_STATE.lives <0){
             prompt("GAME OVER")
         }

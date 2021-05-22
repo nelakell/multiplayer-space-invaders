@@ -1,4 +1,5 @@
 import {GAME_HEIGHT, GAME_STATE, rectsIntersect, setPosition} from "./game.js";
+import {PLAYER_STATE} from "./player.js";
 
 const BONUS_IMG = "img/bolt_gold.png";
 const BONUS_MAX_SPEED = 100;
@@ -47,7 +48,12 @@ export default class Bonus {
         const rect1 = this.$bonus.getBoundingClientRect();
         const rect2 = GAME_STATE.player.$player.getBoundingClientRect();
         if (rectsIntersect(rect1, rect2)) {
-            // TODO: process bonus on player
+            PLAYER_STATE.bonus = [{
+                type: "flash",
+                start: Date.now(),
+                duration: 10000
+            }];
+            PLAYER_STATE.defaultcooldowntimer = 0.5;
             this.remove();
         }
 

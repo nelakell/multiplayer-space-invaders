@@ -5,12 +5,13 @@ import {ENEMIES_STATE} from "./enemiesEngine.js";
 const PLAYER_WIDTH = 20;
 const PLAYER_HEIGHT = 30;
 const PLAYER_IMG = "./img/playerShip1_red.png";
-const SHOOT_COOLDOWN = 1
 
 export const PLAYER_STATE = {
     lives: 3,
     lasers: [],
-    cooldown: 0
+    cooldown: 0,
+    defaultcooldowntimer: 1,
+    bonus: []
 }
 
 export default class Player {
@@ -61,7 +62,7 @@ export default class Player {
             const laser = new Laser(this.xPos, this.yPos, "player");
             $container.appendChild(laser.$laser);
             PLAYER_STATE.lasers.push(laser);
-            PLAYER_STATE.cooldown += SHOOT_COOLDOWN;
+            PLAYER_STATE.cooldown += PLAYER_STATE.defaultcooldowntimer;
         } else if (PLAYER_STATE.cooldown < 0) {
             PLAYER_STATE.cooldown = 0;
         }
@@ -74,6 +75,15 @@ export default class Player {
         for (let i = 0; i < PLAYER_STATE.lasers.length; i++) {
             PLAYER_STATE.lasers[i].update(timePassed, true);
         }
+        for (let i = 0; i < PLAYER_STATE.bonus.length; i++) {
+            console.log("A");
+            let bonus = PLAYER_STATE.bonus[i];
+            if (Date.now() - bonus.start >= bonus.duration) {
+                console.log("B");
+                PLAYER_STATE.bonus.splice(i, 1);
+                PLAYER_STATE.defaultcooldowntimer = 1;
+            }
+        }
     }
 
     detectHit() {
@@ -84,6 +94,15 @@ export default class Player {
             if (rectsIntersect(rect1, rect2)) {
                 this.processHit();
                 laser.remove(ENEMIES_STATE.lasers, laser);
+            }
+        }
+        for (let i = 0; i < ENEMIES_STATE.enemies.length; i++) {
+            const enemy = ENEMIES_STATE.enemies[i];
+            const rect1 = enemy.$enemy.getBoundingClientRect();
+            const rect2 = this.$player.getBoundingClientRect();
+            if (rectsIntersect(rect1, rect2)) {
+                this.processHit();
+                enemy.remove(ENEMIES_STATE.enemies, enemy);
             }
         }
     }
