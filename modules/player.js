@@ -1,4 +1,4 @@
-import {GAME_HEIGHT, GAME_STATE, GAME_WIDTH} from "./game.js";
+import {GAME_HEIGHT, GAME_STATE, GAME_WIDTH, respectBoundaries} from "./game.js";
 import Laser from "./laser.js";
 
 const PLAYER_WIDTH = 20;
@@ -27,7 +27,7 @@ export default class Player {
         this.player.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
     }
 
-    move(timepassed) {
+    move() {
         if (GAME_STATE.leftKeyPressed) {
             this.xPos -= 5;
         } else if (GAME_STATE.rightKeyPressed) {
@@ -45,48 +45,33 @@ export default class Player {
     shoot(timepassed) {
         PLAYER_STATE.cooldown -= timepassed;
         if (GAME_STATE.spaceKeyPressed && PLAYER_STATE.cooldown <= 0) {
+            console.log("shoot")
             const $container = document.querySelector(".game");
-            const laser = new Laser(this.xPos, this.yPos);
+            const laser = new Laser(this.xPos, this.yPos, "player");
             $container.appendChild(laser.laser);
             PLAYER_STATE.lasers.push(laser);
-            setPosition(laser.laser, laser.xPos, laser.yPos);
             PLAYER_STATE.cooldown += SHOOT_COOLDOWN;
-        }else if (PLAYER_STATE.cooldown < 0) {
+        } else if (PLAYER_STATE.cooldown < 0) {
             PLAYER_STATE.cooldown = 0;
         }
     }
 
     update(timePassed) {
-        this.move(timePassed);
+        this.detectHit();
+        this.move();
         this.shoot(timePassed);
-        const lasers = PLAYER_STATE.lasers;
-        for (let i = 0; i < lasers.length; i++) {
-            lasers[i].update(timePassed);
+        for (let i = 0; i < PLAYER_STATE.lasers.length; i++) {
+            console.log("update laser")
+            PLAYER_STATE.lasers[i].update(timePassed, true);
         }
     }
-}
 
-export function removeLaser(laserObj) {
-    const index = PLAYER_STATE.lasers.indexOf(laserObj);
-    if (index > -1) {
-        PLAYER_STATE.lasers.splice(index, 1);
-        const $container = document.querySelector(".game");
-        $container.removeChild(laserObj.laser);
+    detectHit() {
+        // TODO
     }
+
 }
 
 function setPosition($el, x, y) {
     $el.style.transform = `translate(${x}px, ${y}px)`;
-}
-
-function respectBoundaries(v, min, max) {
-    if (v < min) {
-        console.log("MINIMUM REACHED")
-        return min;
-    } else if (v > max) {
-        console.log("MAXIMUM REACHED")
-        return max;
-    } else {
-        return v;
-    }
 }

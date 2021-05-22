@@ -1,4 +1,4 @@
-import {GAME_HEIGHT, removeBonus} from "./game.js";
+import {GAME_HEIGHT, rectsIntersect} from "./game.js";
 
 const BONUS_IMG = "img/bolt_gold.png";
 const BONUS_MAX_SPEED = 100;
@@ -17,20 +17,40 @@ export default class Bonus {
         $container.appendChild(this.bonus);
     }
 
-    update(timePassed) {
+    update(game, timePassed) {
+        this.detectHit(game);
+        if (!this.move(timePassed)) {
+            this.remove(game);
+        }
+    }
+
+    move(timePassed) {
         let yPos = this.yPos + timePassed * BONUS_MAX_SPEED;
-        console.log("timepassed" + timePassed)
-        console.log("max speed" + BONUS_MAX_SPEED)
-        console.log("current pos" + this.yPos)
-        console.log("new pos" + yPos)
         if (this.respectBoundaries(this.yPos + BONUS_HEIGHT, GAME_HEIGHT)) {
-            console.log("move")
             this.yPos = yPos;
             this.setPosition(this.xPos, this.yPos);
-        } else {
-            console.log("remove")
-            removeBonus(this);
+            return true;
         }
+        return false;
+    }
+
+    remove(game) {
+        const index = game.bonus.indexOf(this);
+        if (index > -1) {
+            game.bonus.splice(index, 1);
+            const $container = document.querySelector(".game");
+            $container.removeChild(this.bonus);
+        }
+    }
+
+    detectHit(game) {
+        const rect1 = this.bonus.getBoundingClientRect();
+        const rect2 = game.player.player.getBoundingClientRect();
+        if (rectsIntersect(rect1, rect2)) {
+            // TODO: process bonus on player
+            this.remove(game);
+        }
+
     }
 
     setPosition(x, y) {
