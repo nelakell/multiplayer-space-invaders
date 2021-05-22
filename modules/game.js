@@ -16,7 +16,8 @@ export const GAME_STATE = {
     player: new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50),
     bonus: [],
     score: 0,
-    level: 1
+    level: 1,
+    over: false
 }
 
 export default class Game {
@@ -26,14 +27,12 @@ export default class Game {
     }
 
     update() {
-        console.log("Start time: " + GAME_STATE.startTime);
         const currentTime = Date.now();
-        console.log("current time: " + currentTime);
         const timePassed = (currentTime - GAME_STATE.lastTime) / 1000.0;
 
         this.player.update(timePassed)
         if (PLAYER_STATE.lives < 0) {
-            prompt("GAME OVER! YOUR SCORE IS: " + GAME_STATE.score);
+            GAME_STATE.over = true;
         }
         this.enemiesFleet.update(timePassed);
         for (let i = 0; i < GAME_STATE.bonus.length; i++) {

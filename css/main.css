@@ -24,6 +24,10 @@ footer {
     font-size: 11px;
 }
 
+.playerNameForm {
+    display: flex;
+}
+
 .window-wrapper {
     display: flex;
     flex-direction: column;
@@ -38,12 +42,17 @@ footer {
     background: #370a42;
 }
 
+.endScreen {
+    display: none;
+}
+
 .game {
     width: 800px;
     height: 600px;
     background: url("../img/purple_background.png");
     animation: scroll-background 5s linear infinite;
     position: absolute;
+    display: none;
 }
 
 .game .player{

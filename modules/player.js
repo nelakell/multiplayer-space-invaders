@@ -7,7 +7,7 @@ const PLAYER_HEIGHT = 30;
 const PLAYER_IMG = "./img/playerShip1_red.png";
 
 export const PLAYER_STATE = {
-    lives: 3,
+    lives: 1,
     lasers: [],
     cooldown: 0,
     defaultcooldowntimer: 1,
