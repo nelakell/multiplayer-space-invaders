@@ -1,9 +1,11 @@
-import {ENEMIES_STATE, ENEMY_HORIZONTAL_PADDING, ENEMY_ROWS, ENEMY_VERTICAL_SPACING} from "./enemiesEngine.js";
+import {ENEMIES_STATE} from "./enemiesEngine.js";
 import Laser from "./laser.js";
 import {PLAYER_STATE} from "./player.js";
-import {GAME_STATE, rectsIntersect, respectBoundaries, setPosition} from "./game.js";
+import {GAME_HEIGHT, GAME_STATE, GAME_WIDTH, rectsIntersect, respectBoundaries, setPosition} from "./game.js";
 import Bonus from "./bonus.js";
 
+const ENEMY_HORIZONTAL_SIZE = 40;
+const ENEMY_VERTICAL_SIZE = 30;
 const ENEMY_IMG = "./img/enemyGreen1.png";
 
 export default class Enemy {
@@ -11,30 +13,45 @@ export default class Enemy {
         this.$enemy = document.createElement("img");
         this.$enemy.src = ENEMY_IMG;
         this.$enemy.className = "enemy";
-        this.initXPos = xPos;
-        this.initYPos = yPos;
         this.xPos = xPos;
         this.yPos = yPos;
         this.bonus = Math.random() < 0.5;
-        this.$enemy.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
+        this.xDir = this.getRandomDirection();
+        this.yDir = this.getRandomDirection();
     }
 
-    update() {
+    getRandomDirection() {
+        const directionSpeed = 3;
+        const positiveOrNegative = Math.round(Math.random()) * 2 - 1;
+        return Math.random() * directionSpeed * positiveOrNegative;
+    }
+
+    update(timePassed) {
         this.detectHit();
-        this.move();
+        this.move(timePassed);
         this.shoot();
     }
 
     move() {
-        const dx = Math.sin(GAME_STATE.lastTime / 250.0);
-        const dy = Math.cos(GAME_STATE.lastTime / 250.0);
-        this.xPos = respectBoundaries(this.xPos += dx, 0 + this.initXPos, ENEMY_HORIZONTAL_PADDING + this.initXPos);
-        this.yPos = respectBoundaries(this.yPos += dy, 0 + this.initYPos, (ENEMY_ROWS * ENEMY_VERTICAL_SPACING) + this.initYPos);
+        const xPos = this.xPos + this.xDir
+        if (xPos === respectBoundaries(xPos, 0, GAME_WIDTH - ENEMY_HORIZONTAL_SIZE)) {
+            this.xPos += this.xDir;
+        }else {
+            this.xDir *= -1;
+            this.yDir= this.getRandomDirection();
+        }
+        const yPos = this.yPos + this.yDir
+        if (yPos === respectBoundaries(yPos, 0, GAME_HEIGHT - ENEMY_VERTICAL_SIZE)) {
+            this.yPos += this.yDir;
+        }else{
+            this.xDir = this.getRandomDirection();
+            this.yDir *= -1;
+        }
         setPosition(this.$enemy, this.xPos, this.yPos)
     }
 
     shoot() {
-        if (Math.random() < 0.001) {
+        if (Math.random() < 0.01) {
             const $container = document.querySelector(".game");
             const laser = new Laser(this.xPos, this.yPos, "enemy");
             $container.appendChild(laser.$laser);
