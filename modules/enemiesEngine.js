@@ -7,7 +7,8 @@ export const ENEMY_HORIZONTAL_PADDING = 40;
 export const ENEMY_VERTICAL_SPACING = 80;
 
 export const ENEMIES_STATE = {
-    enemies: []
+    enemies: [],
+    lasers: []
 }
 
 export default class EnemiesEngine {
@@ -15,17 +16,12 @@ export default class EnemiesEngine {
         createEnemies();
     }
 
-    update(timepassed) {
+    update(timePassed) {
         for (let i = 0; i < ENEMIES_STATE.enemies.length; i++) {
-            let enemy = ENEMIES_STATE.enemies[i];
-            enemy.update();
-            const lasers = enemy.lasers;
-            for (let l = 0; l < lasers.length; l++) {
-                const laser = lasers[i];
-                if (laser) {
-                    laser.update(timepassed);
-                }
-            }
+            ENEMIES_STATE.enemies[i].update(timePassed);
+        }
+        for (let i = 0; i < ENEMIES_STATE.lasers.length; i++) {
+            ENEMIES_STATE.lasers[i].update(timePassed);
         }
     }
 }

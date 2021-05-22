@@ -15,17 +15,14 @@ export default class Enemy {
         this.initYPos = yPos;
         this.xPos = xPos;
         this.yPos = yPos;
-        this.lasers = [];
         this.bonus = Math.random() < 0.5;
         this.$enemy.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
     }
 
     update() {
-        this.detectHit()
+        this.detectHit();
         this.move();
-        if (Math.random() < 0.001) {
-            this.shoot()
-        }
+        this.shoot();
     }
 
     move() {
@@ -37,10 +34,12 @@ export default class Enemy {
     }
 
     shoot() {
-        const $container = document.querySelector(".game");
-        const laser = new Laser(this.xPos, this.yPos, "enemy");
-        $container.appendChild(laser.laser);
-        this.lasers.push(laser);
+        if (Math.random() < 0.001) {
+            const $container = document.querySelector(".game");
+            const laser = new Laser(this.xPos, this.yPos, "enemy");
+            $container.appendChild(laser.laser);
+            ENEMIES_STATE.lasers.push(laser);
+        }
     }
 
     detectHit() {

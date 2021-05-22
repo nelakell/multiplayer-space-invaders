@@ -46,7 +46,6 @@ export default class Player {
     shoot(timepassed) {
         PLAYER_STATE.cooldown -= timepassed;
         if (GAME_STATE.spaceKeyPressed && PLAYER_STATE.cooldown <= 0) {
-            console.log("shoot")
             const $container = document.querySelector(".game");
             const laser = new Laser(this.xPos, this.yPos, "player");
             $container.appendChild(laser.laser);
@@ -62,7 +61,6 @@ export default class Player {
         this.move();
         this.shoot(timePassed);
         for (let i = 0; i < PLAYER_STATE.lasers.length; i++) {
-            console.log("update laser")
             PLAYER_STATE.lasers[i].update(timePassed, true);
         }
     }
