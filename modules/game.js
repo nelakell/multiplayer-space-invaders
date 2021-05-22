@@ -6,6 +6,7 @@ export const GAME_WIDTH = 800;
 export const GAME_HEIGHT = 600;
 
 export const GAME_STATE = {
+    startTime: Date.now(),
     lastTime: Date.now(),
     leftKeyPressed: false,
     rightKeyPressed: false,
@@ -13,7 +14,9 @@ export const GAME_STATE = {
     downKeyPressed: false,
     spaceKeyPressed: false,
     player: new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50),
-    bonus: []
+    bonus: [],
+    score: 0,
+    level: 1
 }
 
 export default class Game {
@@ -23,16 +26,22 @@ export default class Game {
     }
 
     update() {
+        console.log("Start time: " + GAME_STATE.startTime);
         const currentTime = Date.now();
+        console.log("current time: " + currentTime);
         const timePassed = (currentTime - GAME_STATE.lastTime) / 1000.0;
 
         this.player.update(timePassed)
-        if (PLAYER_STATE.lives <0){
-            prompt("GAME OVER")
+        if (PLAYER_STATE.lives < 0) {
+            prompt("GAME OVER! YOUR SCORE IS: " + GAME_STATE.score);
         }
         this.enemiesFleet.update(timePassed);
         for (let i = 0; i < GAME_STATE.bonus.length; i++) {
             GAME_STATE.bonus[i].update(timePassed);
+        }
+
+        if ((currentTime - GAME_STATE.startTime) / 1000.0 >= 10 * GAME_STATE.level) {
+            GAME_STATE.level += 1;
         }
 
         GAME_STATE.lastTime = currentTime;

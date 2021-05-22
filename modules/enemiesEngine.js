@@ -1,5 +1,5 @@
 import Enemy from "./enemy.js";
-import {GAME_WIDTH} from "./game.js";
+import {GAME_STATE, GAME_WIDTH} from "./game.js";
 
 export const ENEMY_HORIZONTAL_PADDING = 40;
 
@@ -12,7 +12,7 @@ export const ENEMIES_STATE = {
 export default class EnemiesEngine {
 
     update(timePassed) {
-        if (ENEMIES_STATE.enemies.length < 5 && ENEMIES_STATE.spawning_cooldown <= 0) {
+        if (ENEMIES_STATE.enemies.length < 3 * GAME_STATE.level && ENEMIES_STATE.spawning_cooldown <= 0) {
             spawnEnemy();
             this.resetSpawningCooldown();
         }

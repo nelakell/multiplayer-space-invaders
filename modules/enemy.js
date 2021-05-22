@@ -52,7 +52,7 @@ export default class Enemy {
     }
 
     shoot() {
-        if (Math.random() < 0.01) {
+        if (Math.random() < 0.01 * GAME_STATE.level) {
             const $container = document.querySelector(".game");
             const laser = new Laser(this.xPos, this.yPos, "enemy");
             $container.appendChild(laser.$laser);
@@ -69,6 +69,7 @@ export default class Enemy {
                 laser.remove(PLAYER_STATE.lasers, laser);
                 const bonus = this.bonus
                 this.remove();
+                GAME_STATE.score += 50 * GAME_STATE.level;
                 if (bonus) {
                     GAME_STATE.bonus.push(new Bonus(this.xPos, this.yPos));
                 }
