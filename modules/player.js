@@ -21,20 +21,19 @@ export default class Player {
     }
 
     initPlayer(name, xPos, yPos) {
-        this.$player = document.createElement("div");
         this.$spaceship = document.createElement("img");
         this.$spaceship.src = PLAYER_IMG;
         this.$spaceship.className = "spaceship";
-        this.$player.appendChild(this.$spaceship)
         this.$damage = document.createElement("img");
         this.$damage.src = PLAYER_IMG;
         this.$damage.className = "damage";
+        this.$player = document.createElement("div");
+        this.$player.appendChild(this.$spaceship)
         this.$player.appendChild(this.$damage)
         this.$player.className = "player";
         this.name = name;
         this.xPos = xPos;
         this.yPos = yPos;
-        this.$player.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
     }
 
     move() {
@@ -55,12 +54,12 @@ export default class Player {
         setPosition(this.$player, this.xPos, this.yPos)
     }
 
-    shoot(timepassed) {
-        PLAYER_STATE.cooldown -= timepassed;
+    shoot(timePassed) {
+        PLAYER_STATE.cooldown -= timePassed;
         if (GAME_STATE.spaceKeyPressed && PLAYER_STATE.cooldown <= 0) {
             const $container = document.querySelector(".game");
             const laser = new Laser(this.xPos, this.yPos, "player");
-            $container.appendChild(laser.laser);
+            $container.appendChild(laser.$laser);
             PLAYER_STATE.lasers.push(laser);
             PLAYER_STATE.cooldown += SHOOT_COOLDOWN;
         } else if (PLAYER_STATE.cooldown < 0) {
@@ -80,7 +79,7 @@ export default class Player {
     detectHit() {
         for (let i = 0; i < ENEMIES_STATE.lasers.length; i++) {
             const laser = ENEMIES_STATE.lasers[i];
-            const rect1 = laser.laser.getBoundingClientRect();
+            const rect1 = laser.$laser.getBoundingClientRect();
             const rect2 = this.$player.getBoundingClientRect();
             if (rectsIntersect(rect1, rect2)) {
                 this.processHit();

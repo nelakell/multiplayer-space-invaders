@@ -35,7 +35,6 @@ function createEnemies() {
             const x = j * enemySpacing;
             const enemy = new Enemy(x, y);
             ENEMIES_STATE.enemies.push(enemy);
-            enemy.$enemy.style.transform = `translate(${x}px, ${y}px)`;
             $container.appendChild(enemy.$enemy)
         }
     }

@@ -8,20 +8,20 @@ const LASER_HEIGHT = 20;
 
 export default class Laser {
     constructor(xPos, yPos, source) {
-        this.laser = document.createElement("img");
-        this.laser.src = LASER_IMG;
-        this.laser.className = source + "laser";
+        this.$laser = document.createElement("img");
+        this.$laser.src = LASER_IMG;
+        this.$laser.className = source + "laser";
         this.xPos = xPos;
         this.yPos = yPos;
-        this.laser.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
+        this.$laser.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;
     }
 
     update(timePassed) {
-        if (this.laser.className === "playerlaser") {
+        if (this.$laser.className === "playerlaser") {
             if (!this.moveUp(timePassed)) {
                 this.remove(PLAYER_STATE.lasers, this);
             }
-        } else if (this.laser.className === "enemylaser") {
+        } else if (this.$laser.className === "enemylaser") {
             if (!this.moveDown(timePassed)) {
                 this.remove(ENEMIES_STATE.lasers, this);
             }
@@ -32,7 +32,7 @@ export default class Laser {
         let yPos = this.yPos - timePassed * LASER_MAX_SPEED;
         if (yPos === respectBoundaries(yPos, LASER_HEIGHT, undefined)) {
             this.yPos = yPos;
-            setPosition(this.laser, this.xPos, this.yPos);
+            setPosition(this.$laser, this.xPos, this.yPos);
             return true;
         }
         return false;
@@ -42,7 +42,7 @@ export default class Laser {
         let yPos = this.yPos + timePassed * LASER_MAX_SPEED;
         if (yPos === respectBoundaries(yPos, undefined, GAME_HEIGHT - 3 * LASER_HEIGHT)) {
             this.yPos = yPos;
-            setPosition(this.laser, this.xPos, this.yPos);
+            setPosition(this.$laser, this.xPos, this.yPos);
             return true;
         }
         return false;
@@ -53,7 +53,7 @@ export default class Laser {
         if (index > -1) {
             laserArr.splice(index, 1);
             const $container = document.querySelector(".game");
-            $container.removeChild(laserObj.laser);
+            $container.removeChild(laserObj.$laser);
         }
     }
 

@@ -37,7 +37,7 @@ export default class Enemy {
         if (Math.random() < 0.001) {
             const $container = document.querySelector(".game");
             const laser = new Laser(this.xPos, this.yPos, "enemy");
-            $container.appendChild(laser.laser);
+            $container.appendChild(laser.$laser);
             ENEMIES_STATE.lasers.push(laser);
         }
     }
@@ -45,7 +45,7 @@ export default class Enemy {
     detectHit() {
         for (let i = 0; i < PLAYER_STATE.lasers.length; i++) {
             const laser = PLAYER_STATE.lasers[i];
-            const rect1 = laser.laser.getBoundingClientRect();
+            const rect1 = laser.$laser.getBoundingClientRect();
             const rect2 = this.$enemy.getBoundingClientRect();
             if (rectsIntersect(rect1, rect2)) {
                 laser.remove(PLAYER_STATE.lasers, laser);
