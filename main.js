@@ -1,5 +1,4 @@
 import Game, {GAME_STATE} from './modules/game.js';
-import Highscores from "./backend/models/highscoreModel.js";
 
 document.getElementById("startGame").onclick = loadGame;
 
@@ -26,13 +25,13 @@ function loadGame() {
     function update() {
         if (GAME_STATE.over) {
             document.getElementById("game").style.display = 'none';
-            document.getElementById("endScreen").style.display = 'flex';
+            document.getElementById("endScreen").style.display = 'block';
             document.getElementById("playerScore").textContent = "Game Over! Your score is: " + GAME_STATE.score;
 
-            let highscoreData = new Highscores({
+            let highscoreData = {
                 username: playerName,
                 score: GAME_STATE.score
-            });
+            };
 
             updateHighScore(highscoreData);
 
@@ -57,16 +56,20 @@ async function updateHighScore(newHighScore) {
     getData();
 }
 
-function postData(data) {
-    fetch("http://localhost:3000/api/highscores", {
+async function postData(data) {
+    await fetch("http://localhost:3000/api/highscores", {
         method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(data)
     })
-        .then(function (data) {
-            data.save();
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
         })
-        .then(function (res) {
-            return res.json();
+        .catch((error) => {
+            console.error('Error:', error);
         });
 }
 
@@ -74,15 +77,14 @@ function getData() {
     fetch("http://localhost:3000/api/highscores", {
         method: "GET"
     })
-        .then(function (res) {
-            let data = res.results;
+        .then(response => response.json())
+        .then(data => {
             for (let i = 0; i < data.length; i++) {
                 const div = document.getElementById("highscores");
                 let p = document.createElement("p");
-                p.innerHTML = `${data[i].username} ${data[i].score}`;
-                div.append(p);
+                p.innerHTML = `Name: ${data[i].username} Score: ${data[i].score}`;
+                div.appendChild(p);
             }
-            ;
         });
 }
 

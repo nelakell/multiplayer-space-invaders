@@ -46,6 +46,10 @@ footer {
     display: none;
 }
 
+#highscores {
+    display: block;
+}
+
 .game {
     width: 800px;
     height: 600px;

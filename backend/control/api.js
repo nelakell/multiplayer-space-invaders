@@ -1,5 +1,5 @@
-var Highscores = require('../models/highscoreModel');
-var bodyParser = require('body-parser');
+const Highscores = require('../models/highscoreModel');
+const bodyParser = require('body-parser');
 
 module.exports = function (app) {
 
@@ -14,12 +14,12 @@ module.exports = function (app) {
             });
     });
 
-    app.post('/api/highscores', async function (req, res) {
+    app.post('/api/highscores', function (req, res) {
         let highscore = new Highscores({
             username: req.body.username,
             score: req.body.score
         });
-        await highscore.save();
+        highscore.save();
         res.send(highscore);
     });
 
