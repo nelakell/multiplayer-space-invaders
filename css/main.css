@@ -46,6 +46,16 @@ footer {
     display: none;
 }
 
+.btnBox {
+    height: 50px;
+    margin-top: 30px;
+}
+
+#restartBtn {
+    display: block;
+    margin: auto;
+}
+
 #highscores {
     display: block;
 }

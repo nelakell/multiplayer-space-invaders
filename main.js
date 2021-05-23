@@ -52,26 +52,32 @@ function loadGame() {
 }
 
 async function updateHighScore(newHighScore) {
-    await postData(newHighScore);
-    getData();
-}
-
-async function postData(data) {
     await fetch("http://localhost:3000/api/highscores", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(newHighScore)
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+    getData();
 }
+
+//function postData(data) {
+//    fetch("http://localhost:3000/api/highscores", {
+//        method: "POST",
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        body: JSON.stringify(data)
+//    })
+//        .then(response => response.json())
+//        .then(data => {
+//            console.log('Success:', data);
+//        })
+//        .catch((error) => {
+//            console.error('Error:', error);
+//        });
+//}
 
 function getData() {
     fetch("http://localhost:3000/api/highscores", {
