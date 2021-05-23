@@ -2,4 +2,4 @@
 - cd backend
 - npm install
 - npm install nodemon -g
-- nodemon app.json
+- nodemon app.js

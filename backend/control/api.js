@@ -14,4 +14,13 @@ module.exports = function (app) {
             });
     });
 
+    app.post('/api/highscores', async function (req, res) {
+        let highscore = new Highscores({
+            username: req.body.username,
+            score: req.body.score
+        });
+        await highscore.save();
+        res.send(highscore);
+    });
+
 }
