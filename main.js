@@ -1,4 +1,5 @@
 import Game, {GAME_STATE} from './modules/game.js';
+import Highscores from "./backend/models/highscoreModel.js";
 
 document.getElementById("startGame").onclick = loadGame;
 
@@ -28,10 +29,11 @@ function loadGame() {
             document.getElementById("endScreen").style.display = 'flex';
             document.getElementById("playerScore").textContent = "Game Over! Your score is: " + GAME_STATE.score;
 
-            const highscoreData = {
+            let highscoreData = new Highscores({
                 username: playerName,
                 score: GAME_STATE.score
-            };
+            });
+
             updateHighScore(highscoreData);
 
             document.getElementById("restartBtn").onclick = restart;
@@ -60,6 +62,9 @@ function postData(data) {
         method: "POST",
         body: JSON.stringify(data)
     })
+        .then(function (data) {
+            data.save();
+        })
         .then(function (res) {
             return res.json();
         });
