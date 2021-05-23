@@ -32,7 +32,7 @@ function loadGame() {
                 username: playerName,
                 score: GAME_STATE.score
             };
-            postData(highscoreData);
+            updateHighScore(highscoreData);
 
             document.getElementById("restartBtn").onclick = restart;
 
@@ -50,6 +50,11 @@ function loadGame() {
     }
 }
 
+async function updateHighScore(newHighScore) {
+    await postData(newHighScore);
+    getData();
+}
+
 function postData(data) {
     fetch("http://localhost:3000/api/highscores", {
         method: "POST",
@@ -57,6 +62,22 @@ function postData(data) {
     })
         .then(function (res) {
             return res.json();
+        });
+}
+
+function getData() {
+    fetch("http://localhost:3000/api/highscores", {
+        method: "GET"
+    })
+        .then(function (res) {
+            let data = res.results;
+            for (let i = 0; i < data.length; i++) {
+                const div = document.getElementById("highscores");
+                let p = document.createElement("p");
+                p.innerHTML = `${data[i].username} ${data[i].score}`;
+                div.append(p);
+            }
+            ;
         });
 }
 
