@@ -7,10 +7,17 @@ function restart() {
 }
 
 function loadGame() {
+    let playerName = undefined;
+    if (document.getElementById("playerName").value.length === 0) {
+        let date = new Date();
+        playerName = "Player_" + date.toDateString();
+    } else {
+        playerName = document.getElementById("playerName").value;
+    }
+
     document.getElementById("playerNameForm").style.display = 'none';
     document.getElementById("endScreen").style.display = 'none';
     document.getElementById("game").style.display = 'flex';
-    const playerName = document.getElementById("playerName").value;
 
     const $game = new Game();
 
