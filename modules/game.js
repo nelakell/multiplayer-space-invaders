@@ -13,7 +13,7 @@ export const GAME_STATE = {
     upKeyPressed: false,
     downKeyPressed: false,
     spaceKeyPressed: false,
-    player: new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50),
+    player: undefined,
     bonus: [],
     score: 0,
     level: 1,
@@ -22,7 +22,8 @@ export const GAME_STATE = {
 
 export default class Game {
     constructor() {
-        this.player = GAME_STATE.player;
+        this.player = new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50);
+        GAME_STATE.player = this.player;
         this.enemiesFleet = new EnemiesEngine();
     }
 
