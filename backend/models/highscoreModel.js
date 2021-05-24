@@ -1,12 +1,12 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var highscoreSchema = new Schema({
+const highscoreSchema = new Schema({
     username: String,
     score: Number
 });
 
-var Highscores = mongoose.model('Highscores', highscoreSchema);
+const Highscores = mongoose.model('Highscores', highscoreSchema);
 
 module.exports = Highscores;
