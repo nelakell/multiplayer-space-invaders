@@ -1,7 +1,7 @@
 import {GAME_HEIGHT, GAME_STATE, rectsIntersect, setPosition} from "./game.js";
 import {PLAYER_STATE} from "./player.js";
 
-const BONUS_IMG = "img/bolt_gold.png";
+const BONUS_IMG = "img/bonus/bolt_gold.png";
 const BONUS_MAX_SPEED = 100;
 const BONUS_HEIGHT = 30;
 

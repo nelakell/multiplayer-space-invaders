@@ -6,7 +6,8 @@ import Bonus from "./bonus.js";
 
 const ENEMY_HORIZONTAL_SIZE = 40;
 const ENEMY_VERTICAL_SIZE = 30;
-const ENEMY_IMG = "./img/enemyGreen1.png";
+const ENEMY_IMG = "./img/enemy/enemyGreen1.png";
+const ENEMY_SPEED = 3;
 
 export default class Enemy {
     constructor(xPos, yPos) {
@@ -21,14 +22,13 @@ export default class Enemy {
     }
 
     getRandomDirection() {
-        const directionSpeed = 3;
-        const positiveOrNegative = Math.round(Math.random()) * 2 - 1;
-        return Math.random() * directionSpeed * positiveOrNegative;
+        const posOrNeg = Math.round(Math.random()) * 2 - 1;
+        return Math.random() * ENEMY_SPEED * posOrNeg;
     }
 
     update(timePassed) {
         this.detectHit();
-        this.detectCollision();
+        this.preventEnemyCollision();
         this.move(timePassed);
         this.shoot();
     }
@@ -37,14 +37,14 @@ export default class Enemy {
         const xPos = this.xPos + this.xDir
         if (xPos === respectBoundaries(xPos, 0, GAME_WIDTH - ENEMY_HORIZONTAL_SIZE)) {
             this.xPos += this.xDir;
-        }else {
+        } else {
             this.xDir *= -1;
-            this.yDir= this.getRandomDirection();
+            this.yDir = this.getRandomDirection();
         }
         const yPos = this.yPos + this.yDir
         if (yPos === respectBoundaries(yPos, 0, GAME_HEIGHT - ENEMY_VERTICAL_SIZE)) {
             this.yPos += this.yDir;
-        }else{
+        } else {
             this.xDir = this.getRandomDirection();
             this.yDir *= -1;
         }
@@ -77,10 +77,10 @@ export default class Enemy {
         }
     }
 
-    detectCollision() {
+    preventEnemyCollision() {
         for (let i = 0; i < ENEMIES_STATE.enemies.length; i++) {
             const enemy = ENEMIES_STATE.enemies[i];
-            if(enemy === this){
+            if (enemy === this) {
                 continue;
             }
             const rect1 = enemy.$enemy.getBoundingClientRect();

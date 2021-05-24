@@ -2,14 +2,15 @@ import {GAME_HEIGHT, respectBoundaries, setPosition} from "./game.js";
 import {PLAYER_STATE} from "./player.js";
 import {ENEMIES_STATE} from "./enemiesEngine.js";
 
-const LASER_IMG = "img/laserRed07.png";
+const LASER_PLAYER_IMG = "img/player/laserRed07.png";
+const LASER_ENEMY_IMG = "img/enemy/laserGreen05.png";
 const LASER_MAX_SPEED = 300;
 const LASER_HEIGHT = 20;
 
 export default class Laser {
     constructor(xPos, yPos, source) {
         this.$laser = document.createElement("img");
-        this.$laser.src = LASER_IMG;
+        this.$laser.src = source === "enemy" ? LASER_ENEMY_IMG : LASER_PLAYER_IMG;
         this.$laser.className = source + "laser";
         this.xPos = xPos;
         this.yPos = yPos;

@@ -32,7 +32,7 @@ export default class EnemiesEngine {
 }
 
 function spawnEnemy() {
-    const xPos = Math.random() * (GAME_WIDTH-ENEMY_HORIZONTAL_PADDING);
+    const xPos = Math.random() * (GAME_WIDTH - ENEMY_HORIZONTAL_PADDING);
     const enemy = new Enemy(xPos, 0);
     ENEMIES_STATE.enemies.push(enemy);
     const $container = document.querySelector(".game");

@@ -4,7 +4,7 @@ import {ENEMIES_STATE} from "./enemiesEngine.js";
 
 const PLAYER_WIDTH = 20;
 const PLAYER_HEIGHT = 30;
-const PLAYER_IMG = "./img/playerShip1_red.png";
+const PLAYER_IMG = "./img/player/playerShip1_red.png";
 
 export const PLAYER_STATE = {
     lives: 1,
@@ -69,33 +69,31 @@ export default class Player {
     }
 
     update(timePassed) {
-        this.detectHit();
+        this.detectLaserHits();
+        this.detectEnemyCollision();
         this.move();
         this.shoot(timePassed);
-        for (let i = 0; i < PLAYER_STATE.lasers.length; i++) {
-            PLAYER_STATE.lasers[i].update(timePassed, true);
-        }
+        this.updateLaserObjs(timePassed);
+        this.updateBonus();
+    }
+
+    updateBonus() {
         for (let i = 0; i < PLAYER_STATE.bonus.length; i++) {
-            console.log("A");
             let bonus = PLAYER_STATE.bonus[i];
             if (Date.now() - bonus.start >= bonus.duration) {
-                console.log("B");
                 PLAYER_STATE.bonus.splice(i, 1);
                 PLAYER_STATE.defaultcooldowntimer = 1;
             }
         }
     }
 
-    detectHit() {
-        for (let i = 0; i < ENEMIES_STATE.lasers.length; i++) {
-            const laser = ENEMIES_STATE.lasers[i];
-            const rect1 = laser.$laser.getBoundingClientRect();
-            const rect2 = this.$player.getBoundingClientRect();
-            if (rectsIntersect(rect1, rect2)) {
-                this.processHit();
-                laser.remove(ENEMIES_STATE.lasers, laser);
-            }
+    updateLaserObjs(timePassed) {
+        for (let i = 0; i < PLAYER_STATE.lasers.length; i++) {
+            PLAYER_STATE.lasers[i].update(timePassed, true);
         }
+    }
+
+    detectEnemyCollision() {
         for (let i = 0; i < ENEMIES_STATE.enemies.length; i++) {
             const enemy = ENEMIES_STATE.enemies[i];
             const rect1 = enemy.$enemy.getBoundingClientRect();
@@ -107,13 +105,25 @@ export default class Player {
         }
     }
 
+    detectLaserHits() {
+        for (let i = 0; i < ENEMIES_STATE.lasers.length; i++) {
+            const laser = ENEMIES_STATE.lasers[i];
+            const rect1 = laser.$laser.getBoundingClientRect();
+            const rect2 = this.$player.getBoundingClientRect();
+            if (rectsIntersect(rect1, rect2)) {
+                this.processHit();
+                laser.remove(ENEMIES_STATE.lasers, laser);
+            }
+        }
+    }
+
     processHit() {
         if (PLAYER_STATE.lives === 3) {
-            this.$damage.src = "./img/playerShip1_damage1.png"
+            this.$damage.src = "./img/player/playerShip1_damage1.png"
         } else if (PLAYER_STATE.lives === 2) {
-            this.$damage.src = "./img/playerShip1_damage2.png"
+            this.$damage.src = "./img/player/playerShip1_damage2.png"
         } else if (PLAYER_STATE.lives === 1) {
-            this.$damage.src = "./img/playerShip1_damage3.png"
+            this.$damage.src = "./img/player/playerShip1_damage3.png"
         }
         PLAYER_STATE.lives -= 1;
     }
