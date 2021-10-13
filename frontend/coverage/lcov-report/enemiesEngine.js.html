@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for game.js</title>
+    <title>Code coverage report for enemiesEngine.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="index.html">All files</a> game.js</h1>
+        <h1><a href="index.html">All files</a> enemiesEngine.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.43% </span>
+                <span class="strong">11.11% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/14</span>
+                <span class='fraction'>2/18</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.43% </span>
+                <span class="strong">12.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/14</span>
+                <span class='fraction'>2/16</span>
             </div>
         
             
@@ -92,12 +92,15 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,18 +108,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -127,40 +124,58 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Player from "./player.js";
-import {PLAYER_MOVEMENTS, PLAYER_SHOOT} from "./constants.js";
-import EnemiesEngine from "./enemiesEngine.js";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Enemy from "./enemy.js";
+import {GAME_STATE, GAME_WIDTH} from "./game.js";
 &nbsp;
-export const GAME_WIDTH = 800;
-export const GAME_HEIGHT = 600;
+export const ENEMY_HORIZONTAL_PADDING = 40;
 &nbsp;
-export const GAME_STATE = {
-    lastTime: Date.now()
+export const ENEMIES_STATE = {
+    enemies: [],
+    lasers: [],
+    spawning_cooldown: 0
 }
 &nbsp;
-export default class Game {
-<span class="fstat-no" title="function not covered" >    co</span>nstructor() {
-<span class="cstat-no" title="statement not covered" >        this.player = new Player("player", GAME_WIDTH / 2, GAME_HEIGHT - 50);</span>
-<span class="cstat-no" title="statement not covered" >        this.enemiesFleet = new EnemiesEngine();</span>
-    }
+export default class EnemiesEngine {
 &nbsp;
-<span class="fstat-no" title="function not covered" >    on</span>KeyDown(e) {
-<span class="cstat-no" title="statement not covered" >        if (PLAYER_MOVEMENTS.includes(e.keyCode)) {</span>
-<span class="cstat-no" title="statement not covered" >            this.player.move(e.keyCode)</span>
-        } else <span class="cstat-no" title="statement not covered" >if (PLAYER_SHOOT === e.keyCode) {</span>
-<span class="cstat-no" title="statement not covered" >            this.player.shoot();</span>
+<span class="fstat-no" title="function not covered" >    up</span>date(timePassed) {
+<span class="cstat-no" title="statement not covered" >        if (ENEMIES_STATE.enemies.length &lt; 3 * GAME_STATE.level &amp;&amp; ENEMIES_STATE.spawning_cooldown &lt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >            spawnEnemy();</span>
+<span class="cstat-no" title="statement not covered" >            this.resetSpawningCooldown();</span>
         }
+<span class="cstat-no" title="statement not covered" >        for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; ENEMIES_STATE.enemies.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            ENEMIES_STATE.enemies[i].update(timePassed);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; ENEMIES_STATE.lasers.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            ENEMIES_STATE.lasers[i].update(timePassed);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        ENEMIES_STATE.spawning_cooldown -= timePassed;</span>
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    up</span>date() {
-        const currentTime = <span class="cstat-no" title="statement not covered" >Date.now();</span>
-        const timePassed = <span class="cstat-no" title="statement not covered" >(currentTime - GAME_STATE.lastTime) / 1000.0;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        this.player.update(timePassed)</span>
-<span class="cstat-no" title="statement not covered" >        this.enemiesFleet.updateEnemies();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        GAME_STATE.lastTime = currentTime;</span>
+<span class="fstat-no" title="function not covered" >    re</span>setSpawningCooldown() {
+<span class="cstat-no" title="statement not covered" >        ENEMIES_STATE.spawning_cooldown = 3;</span>
     }
+&nbsp;
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >spawnEnemy(</span>) {
+    const xPos = <span class="cstat-no" title="statement not covered" >Math.random() * (GAME_WIDTH - ENEMY_HORIZONTAL_PADDING);</span>
+    const enemy = <span class="cstat-no" title="statement not covered" >new Enemy(xPos, 0);</span>
+<span class="cstat-no" title="statement not covered" >    ENEMIES_STATE.enemies.push(enemy);</span>
+    const $container = <span class="cstat-no" title="statement not covered" >document.querySelector(".game");</span>
+<span class="cstat-no" title="statement not covered" >    $container.appendChild(enemy.$enemy);</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -169,7 +184,7 @@ export default class Game {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Apr 18 2021 21:33:52 GMT+0200 (Central European Summer Time)
+                at Tue Oct 12 2021 21:14:36 GMT+0200 (Central European Summer Time)
             </div>
         </div>
         <script src="prettify.js"></script>

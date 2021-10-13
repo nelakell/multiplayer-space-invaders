@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for enemiesEngine.js</title>
+    <title>Code coverage report for laser.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="index.html">All files</a> enemiesEngine.js</h1>
+        <h1><a href="index.html">All files</a> laser.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.63% </span>
+                <span class="strong">12.12% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/32</span>
+                <span class='fraction'>4/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.67% </span>
+                <span class="strong">12.12% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/30</span>
+                <span class='fraction'>4/33</span>
             </div>
         
             
@@ -116,7 +116,10 @@
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -124,10 +127,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -141,24 +140,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -171,68 +154,91 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Enemy from "./enemy.js";
-import {GAME_HEIGHT, GAME_STATE, GAME_WIDTH} from "./game.js";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {GAME_HEIGHT, respectBoundaries, setPosition} from "./game.js";
+import {PLAYER_STATE} from "./player.js";
+import {ENEMIES_STATE} from "./enemiesEngine.js";
 &nbsp;
-const ENEMIES_PER_ROW = 10;
-const ENEMY_ROWS = 3;
-const ENEMY_HORIZONTAL_PADDING = 40;
-const ENEMY_VERTICAL_SPACING = 80;
+const LASER_PLAYER_IMG = "img/player/laserRed07.png";
+const LASER_ENEMY_IMG = "img/enemy/laserGreen05.png";
+const LASER_MAX_SPEED = 300;
+const LASER_HEIGHT = 20;
 &nbsp;
-export const ENEMIES_STATE = {
-    enemies: []
-}
-&nbsp;
-export default class EnemiesEngine {
-<span class="fstat-no" title="function not covered" >    co</span>nstructor() {
-        const $container = <span class="cstat-no" title="statement not covered" >document.querySelector(".game");</span>
-<span class="cstat-no" title="statement not covered" >        this.$enemiesContainer = document.createElement("div");</span>
-<span class="cstat-no" title="statement not covered" >        this.xPos = 0;</span>
-<span class="cstat-no" title="statement not covered" >        this.yPos = 0;</span>
-<span class="cstat-no" title="statement not covered" >        createEnemies(this.$enemiesContainer);</span>
-<span class="cstat-no" title="statement not covered" >        $container.appendChild(this.$enemiesContainer)</span>
+export default class Laser {
+<span class="fstat-no" title="function not covered" >    co</span>nstructor(xPos, yPos, source) {
+<span class="cstat-no" title="statement not covered" >        this.$laser = document.createElement("img");</span>
+<span class="cstat-no" title="statement not covered" >        this.$laser.src = source === "enemy" ? LASER_ENEMY_IMG : LASER_PLAYER_IMG;</span>
+<span class="cstat-no" title="statement not covered" >        this.$laser.className = source + "laser";</span>
+<span class="cstat-no" title="statement not covered" >        this.xPos = xPos;</span>
+<span class="cstat-no" title="statement not covered" >        this.yPos = yPos;</span>
+<span class="cstat-no" title="statement not covered" >        this.$laser.style.transform = `translate(${this.xPos}px, ${this.yPos}px)`;</span>
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    up</span>dateEnemies() {
-        const dx = <span class="cstat-no" title="statement not covered" >Math.sin(GAME_STATE.lastTime / 1000.0);</span>
-        const dy = <span class="cstat-no" title="statement not covered" >Math.cos(GAME_STATE.lastTime / 1000.0);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        this.xPos = respectBoundaries(this.xPos += dx, 0, ENEMY_HORIZONTAL_PADDING);</span>
-<span class="cstat-no" title="statement not covered" >        this.yPos = respectBoundaries(this.yPos += dy, 0, (GAME_HEIGHT / 3 * 2) - (ENEMY_ROWS * ENEMY_VERTICAL_SPACING));</span>
-<span class="cstat-no" title="statement not covered" >        this.setPosition(this.$enemiesContainer, this.xPos, this.yPos)</span>
-    }
-&nbsp;
-<span class="fstat-no" title="function not covered" >    se</span>tPosition($el, x, y) {
-<span class="cstat-no" title="statement not covered" >        $el.style.transform = `translate(${x}px, ${y}px)`;</span>
-    }
-&nbsp;
-}
-&nbsp;
-function <span class="fstat-no" title="function not covered" >createEnemies(</span>$enemiesContainer) {
-    const enemySpacing = <span class="cstat-no" title="statement not covered" >(GAME_WIDTH - ENEMY_HORIZONTAL_PADDING * 2) / (ENEMIES_PER_ROW - 1);</span>
-<span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; ENEMY_ROWS; i++) {</span>
-        const y = <span class="cstat-no" title="statement not covered" >i * ENEMY_VERTICAL_SPACING;</span>
-<span class="cstat-no" title="statement not covered" >        for (let j = <span class="cstat-no" title="statement not covered" >0;</span> j &lt; ENEMIES_PER_ROW; j++) {</span>
-            const x = <span class="cstat-no" title="statement not covered" >j * enemySpacing;</span>
-            const enemy = <span class="cstat-no" title="statement not covered" >new Enemy(x, y);</span>
-<span class="cstat-no" title="statement not covered" >            ENEMIES_STATE.enemies.push(enemy);</span>
-<span class="cstat-no" title="statement not covered" >            $enemiesContainer.appendChild(enemy.$enemy)</span>
+<span class="fstat-no" title="function not covered" >    up</span>date(timePassed) {
+<span class="cstat-no" title="statement not covered" >        if (this.$laser.className === "playerlaser") {</span>
+<span class="cstat-no" title="statement not covered" >            if (!this.moveUp(timePassed)) {</span>
+<span class="cstat-no" title="statement not covered" >                this.remove(PLAYER_STATE.lasers, this);</span>
+            }
+        } else <span class="cstat-no" title="statement not covered" >if (this.$laser.className === "enemylaser") {</span>
+<span class="cstat-no" title="statement not covered" >            if (!this.moveDown(timePassed)) {</span>
+<span class="cstat-no" title="statement not covered" >                this.remove(ENEMIES_STATE.lasers, this);</span>
+            }
         }
     }
-}
 &nbsp;
-function <span class="fstat-no" title="function not covered" >respectBoundaries(</span>v, min, max) {
-<span class="cstat-no" title="statement not covered" >    if (v &lt; min) {</span>
-<span class="cstat-no" title="statement not covered" >        return min;</span>
-    } else <span class="cstat-no" title="statement not covered" >if (v &gt; max) {</span>
-<span class="cstat-no" title="statement not covered" >        return max;</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >        return v;</span>
+<span class="fstat-no" title="function not covered" >    mo</span>veUp(timePassed) {
+        let yPos = <span class="cstat-no" title="statement not covered" >this.yPos - timePassed * LASER_MAX_SPEED;</span>
+<span class="cstat-no" title="statement not covered" >        if (yPos === respectBoundaries(yPos, LASER_HEIGHT, undefined)) {</span>
+<span class="cstat-no" title="statement not covered" >            this.yPos = yPos;</span>
+<span class="cstat-no" title="statement not covered" >            setPosition(this.$laser, this.xPos, this.yPos);</span>
+<span class="cstat-no" title="statement not covered" >            return true;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        return false;</span>
     }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    mo</span>veDown(timePassed) {
+        let yPos = <span class="cstat-no" title="statement not covered" >this.yPos + timePassed * LASER_MAX_SPEED;</span>
+<span class="cstat-no" title="statement not covered" >        if (yPos === respectBoundaries(yPos, undefined, GAME_HEIGHT - 3 * LASER_HEIGHT)) {</span>
+<span class="cstat-no" title="statement not covered" >            this.yPos = yPos;</span>
+<span class="cstat-no" title="statement not covered" >            setPosition(this.$laser, this.xPos, this.yPos);</span>
+<span class="cstat-no" title="statement not covered" >            return true;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        return false;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    re</span>move(laserArr, laserObj) {
+        const index = <span class="cstat-no" title="statement not covered" >laserArr.indexOf(laserObj);</span>
+<span class="cstat-no" title="statement not covered" >        if (index &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >            laserArr.splice(index, 1);</span>
+            const $container = <span class="cstat-no" title="statement not covered" >document.querySelector(".game");</span>
+<span class="cstat-no" title="statement not covered" >            $container.removeChild(laserObj.$laser);</span>
+        }
+    }
+&nbsp;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -241,7 +247,7 @@ function <span class="fstat-no" title="function not covered" >respectBoundaries(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Apr 18 2021 21:33:52 GMT+0200 (Central European Summer Time)
+                at Tue Oct 12 2021 21:14:36 GMT+0200 (Central European Summer Time)
             </div>
         </div>
         <script src="prettify.js"></script>
