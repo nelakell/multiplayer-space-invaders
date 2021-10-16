@@ -36,4 +36,6 @@ Auf der Konsole im Projekt Root einzugeben:
 
 ## Frontend
 Auf der Konsole im Projekt Root einzugeben:
-* [index.html](./frontend/index.html) im Browser öffnen
+* cd frontend
+* npm install
+* npm start
