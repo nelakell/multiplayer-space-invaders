@@ -1,0 +1,50 @@
+input[type="text"], textarea {
+    /*background-color : #a672ba;*/
+}
+
+.fighter-choice input {
+    margin: 0;
+    padding: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.red {
+    background-image: url(./res/kenney/PNG/playerShip1_red.png);
+}
+
+.blue {
+    background-image: url(./res/kenney/PNG/playerShip1_blue.png);
+}
+
+.green {
+    background-image: url(./res/kenney/PNG/playerShip1_green.png);
+}
+
+.fighter-card {
+    cursor: pointer;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 100px;
+    height: 50px;
+    -webkit-transition: all 100ms ease-in;
+    -moz-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+    -webkit-filter: opacity(.5);
+    -moz-filter: opacity(.5);
+    filter: opacity(.5);
+}
+
+.fighter-card:hover {
+    -webkit-filter: grayscale(.5) opacity(.9);
+    -moz-filter: grayscale(.5) opacity(.9);
+    filter: grayscale(.5) opacity(.9);
+}
+
+[type=radio]:checked + label {
+    -webkit-filter: opacity(1.9);
+    -moz-filter: opacity(1.9);
+    filter: opacity(1.9);
+}
