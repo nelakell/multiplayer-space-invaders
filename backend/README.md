@@ -1,5 +1,6 @@
 # Run backend
-- cd backend
-- npm install
-- npm install nodemon -g
-- nodemon app.js
+Auf der Konsole im Projekt Root einzugeben:
+* cd backend
+* npm install
+* npm run build
+* npm start
