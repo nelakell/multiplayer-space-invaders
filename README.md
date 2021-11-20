@@ -1,19 +1,41 @@
-# Space Invaders
+# Space Invaders 👾
+Bilder von https://kenney.nl/assets/space-shooter-redux.
 
-Bilder von https://kenney.nl/assets/space-shooter-redux
+# Das Spiel
+Implementierung des Shoot'em Up Space Invaders. Ein Spieler (Hero) kämpft gegen die bevorstehende Invasion der Aliens (Invaders).
+Dabei hat er drei Leben zur Verfügung und ist sich zuhnehmender Schwierigkeit konfrontiert. Der Hero Kämpft so lange wie er Leben
+übrig hat. Bleiben keine Leben mehr übrig, wird die erreichte Punktzahl sowie die bisher erreichten Highscores, welche in einer
+MongoDB persistiert werden, angezeigt.
 
-# Module
+# Screens
+Die Variante von Space Invaders durchläuft während einer Runde drei Screens:
+* StartScreen: Eingabe des Spielernamens, Button um das Spiel zu starten.
+* BattleScreen: Das eigentliche Spiel welches so lange läuft wie der Hero (Benutzer) Leben übrig hat.
+* EndScreen: Anzeige der erreichten Score und Gesamtrangliste.
 
-Das Spiel ist bis anhin in nachfolgenden Module aufgeteilt:
+# Komponenten des Spiels
+Die Komponenten des Spiels sind:
+* Hero: Die Spielfigur des Benutzers. Das Raumschiff kann sich in 2D bewegen und den Laser abfeuern um damit die Invaders abzuwehren und dadurch die Invasion zu verhindern.
+* Invader: Die feindlichen Raumschiffe. Autonome Bewegung und Schussabgabe innerhalb des Spielfeldes.
+* EnemiesEngine: Verwaltung (Engine) der feindlichen Raumschiffe. Ist besorgt Raumschiffe basierend auf dem aktuellen Level zu generieren.
+* Laser: Ein einzelner Schuss.
+* Bonus: Ein Bonus-Gegenstand welcher vom zerstörten Invader aus nach unten gleitet.
+* Chat: Die beiden Spieler können sich während des Spiels zusammen über einen Chat unterhalten
 
-- Player: Enthält die wesentlichen Eigenschaften des Spieler-Raumschiffes sowie die Funktionalität, um es zu bewegen und den Laser abzufeuern.
+# Installation
 
-- Feind: Enthält die wesentlichen Eigenschaften der feindlichen Raumschiffe. Im Vergleich zum Spieler wird hier jedoch die Funktionalität in ein weiteres Modul ausgelagert, da die Feinde in einer grossen homogenen Anzahl auftreten.
+## Prerequisites
+* Node version 16.*
 
-- Laser: Dieses Modul enthält die wesentlichen Eigenschaften der Laser-Kanone sowie die Funktionalität, um den Laser zu bewegen und zu prüfen, ob er den Game-Rand bereits verlassen hat.
+## Backend
+Auf der Konsole im Projekt Root einzugeben:
+* cd backend
+* npm install
+* npm run build
+* npm start
 
-- EnemiesEngine: Dieses Modul soll das Verhalten der feindlichen Raumschiffe steuern und koordinieren.
-
-- Game: Dieses Modul soll den Game-Status halten sowie die Instanzen der wesentlichen anderen Klassen innerhalb der anderen Module erstellen und steuern. Zudem enthält dieses Modul die Update-Funktionalität für das Game, welche durch die main.js-Klasse ausgelöst wird (Game Loop).
-
-- Main: Dieses Modul startet den Game Loop und beinhaltet Event-Listeners zum stuern des Spieler-Raumschiffs.
+## Frontend
+Auf der Konsole im Projekt Root einzugeben:
+* cd frontend
+* npm install
+* npm start
