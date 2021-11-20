@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  server:
+    container_name: space-invaders-multiplayer-backend
+    restart: always
+    build: ./backend
+    ports:
+      - '8000:8000'
+  game:
+    container_name: space-invaders-multiplayer-frontend
+    restart: always
+    build:
+      context: ./frontend
+    ports:
+      - '3000:3000'
+    external_links:
+      - 'server'

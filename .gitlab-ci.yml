@@ -1,0 +1,93 @@
+image: docker:stable
+
+stages:
+  - build
+  - push
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+before_script:
+  - docker info
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+build-frontend:
+  stage: build
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build || true
+    - docker build -t $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build ./frontend/
+    - docker build --cache-from $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build --tag $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build ./frontend/
+    - docker push $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build
+
+build-backend:
+  stage: build
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build || true
+    - docker build -t $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build ./backend/
+    - docker build --cache-from $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build --tag $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build ./backend/
+    - docker push $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build
+
+push stable:
+  variables:
+    GIT_STRATEGY: none
+  stage: push
+  only:
+    - master
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build
+    - docker tag $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:stable
+    - docker push $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:stable
+    - docker pull $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build
+    - docker tag $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:stable
+    - docker push $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:stable
+
+push latest:
+  variables:
+    GIT_STRATEGY: none
+  stage: push
+  only:
+    - stage
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build
+    - docker tag $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:build $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:latest
+    - docker push $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-frontend:latest
+    - docker pull $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build
+    - docker tag $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:build $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:latest
+    - docker push $CI_REGISTRY_IMAGE/$CI_PROJECT_TITLE-backend:latest
+
+deploy:
+  stage: deploy
+  image:
+    name: docker/compose:1.29.2
+    entrypoint: [ "" ]
+  only:
+    - master
+  environment:
+    name: stage
+    url: https://86.119.28.166
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apk update && apk add openssh-client )'
+    - eval $(ssh-agent -s)
+    - echo "$ID_RSA" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+  script:
+    - ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
+    - ssh $SERVER_USER@$SERVER_IP "docker stop $CI_PROJECT_NAME-backend || true"
+    - ssh $SERVER_USER@$SERVER_IP "docker stop $CI_PROJECT_NAME-frontend || true"
+    - ssh $SERVER_USER@$SERVER_IP "docker rm $CI_PROJECT_NAME-backend || true"
+    - ssh $SERVER_USER@$SERVER_IP "docker rm $CI_PROJECT_NAME-frontend || true"
+    - ssh $SERVER_USER@$SERVER_IP "docker image rm $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-backend:stable || true"
+    - ssh $SERVER_USER@$SERVER_IP "docker image rm $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-frontend:stable || true"
+    # pull new container
+    - ssh $SERVER_USER@$SERVER_IP "docker login -u gitlab+deploy-token-54 -p j9yM8ExpA5cFbW5eK1kk $CI_REGISTRY"
+    - ssh $SERVER_USER@$SERVER_IP "docker pull $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-backend:stable"
+    - ssh $SERVER_USER@$SERVER_IP "docker pull $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-frontend:stable"
+    # run new container
+    - ssh $SERVER_USER@$SERVER_IP "docker run -d --restart unless-stopped --name $CI_PROJECT_NAME-backend -p 8000:8000 -e "variableData=Docker-Run-Command" $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-backend:stable"
+    - ssh $SERVER_USER@$SERVER_IP "docker run -d --restart unless-stopped --name $CI_PROJECT_NAME-frontend -p 3000:3000 -e "variableData=Docker-Run-Command" $CI_REGISTRY_IMAGE/$CI_PROJECT_NAME-frontend:stable"
+
