@@ -5,11 +5,14 @@ import {InputTextarea} from "primereact/inputtextarea";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
 import {Checkbox} from "primereact/checkbox";
+import {useTranslation} from "react-i18next";
 
 function LobbyScreen(props) {
 
     const [chatInput, setChatInput] = useState('');
     const [ready, setReady] = useState(false);
+
+    const {t, i18n} = useTranslation();
 
     const sendMessage = () => {
         if (chatInput && chatInput.length > 0) {
@@ -27,7 +30,7 @@ function LobbyScreen(props) {
         <div>
             <div className="container">
                 <div className="row">
-                    <LobbyHeadline readystate={props.room.users.length > 1}/>
+                    <b>{t('waiting-for-opponent')}</b>
                     <Checkbox onChange={e => setReadyState(e.checked)} checked={ready}/>
                     <label>Bereit</label>
                 </div>
@@ -39,15 +42,11 @@ function LobbyScreen(props) {
                                onChange={(e) => setChatInput(e.target.value)}/>
                 </div>
                 <div className="row">
-                    <Button value="send" id="chat-send" onClick={sendMessage}>Nachricht absenden</Button>
+                    <Button value="send" id="chat-send" onClick={sendMessage}>{t('send-chat-message')}</Button>
                 </div>
             </div>
         </div>
     )
-}
-
-function LobbyHeadline(props) {
-    return props.readystate ? <b>Spieler komplett. Bereit?</b> : <b>Warte auf Mitspieler ..</b>;
 }
 
 export default LobbyScreen;

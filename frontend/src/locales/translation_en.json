@@ -1,0 +1,9 @@
+{
+  "error": "Error",
+  "player-name-label": "Player name:",
+  "fighter-choice-label": "Choose a hero:",
+  "enter-lobby": "Enter lobby",
+  "missing-fighter-choice": "Please select a fighter to proceed.",
+  "send-chat-message": "Send message",
+  "waiting-for-opponent": "Waiting for opponent .."
+}

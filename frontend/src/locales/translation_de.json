@@ -1,0 +1,9 @@
+{
+  "error": "Fehler",
+  "player-name-label": "Spielername:",
+  "fighter-choice-label": "Wählen sie einen Held aus:",
+  "enter-lobby": "Lobby beitreten",
+  "missing-fighter-choice": "Sie müssen ein Raumschiff auswählen um fortzufahren.",
+  "send-chat-message": "Nachricht absenden",
+  "waiting-for-opponent": "Warte auf Mitspieler .."
+}
