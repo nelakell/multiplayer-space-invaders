@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import './WelcomeScreen.css';
+import './LobbyScreen.css';
 import {InputTextarea} from "primereact/inputtextarea";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
