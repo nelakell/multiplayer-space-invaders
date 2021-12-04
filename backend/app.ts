@@ -11,13 +11,21 @@ export type User = {
     state: UserState
 };
 
+export type GameRoom = {
+    users: User[];
+};
+
 export type UserState = {
     ready: boolean,
 }
 
-export const room = {
+export const lobbyRoom = {
     users: [] as User[]
 };
+
+export const gameRooms = {
+    rooms: [] as GameRoom[]
+}
 
 type Message = {
     action: MessageAction,
@@ -54,7 +62,7 @@ export function stringifyMessage(action: MessageAction, target: ActionTarget, va
 }
 
 const addUser = (user: User) => {
-    room.users.push(user);
+    lobbyRoom.users.push(user);
     onUserMessageHandler(user);
 
     user.socket.onclose = function () {
@@ -74,24 +82,26 @@ function broadcastUserUpdate(user: User, action: MessageAction) {
     if (MessageAction.CREATE === action) {
         sendMessageToAllUsers(stringifyMessage(action, ActionTarget.USER, {
             name: 'info',
-            message: "Welcome player '" + user.name + "', joining the party for team " + user.fighter + ". Total connections: " + room.users.length
+            message: "Welcome player '" + user.name + "', joining the party for team " + user.fighter + ". Total connections: " + lobbyRoom.users.length
         }));
     } else if (MessageAction.DELETE === action) {
         sendMessageToAllUsers(stringifyMessage(action, ActionTarget.USER, {
             name: 'info',
-            message: user.name + " has left the lobby. Total connections: " + room.users.length
+            message: user.name + " has left the lobby. Total connections: " + lobbyRoom.users.length
         }));
     }
 }
 
-function broadcastGameStart(users: User[]) {
-    sendMessageToSpecificUsers(users, stringifyMessage(MessageAction.CREATE, ActionTarget.GAME, {}));
+function broadcastGameStart(gameRoom: GameRoom) {
+    sendMessageToSpecificUsers(gameRoom.users, stringifyMessage(MessageAction.CREATE, ActionTarget.GAME, {}));
 }
 
 function launchGameHandler() {
-    const users = room.users.filter(user => user.state.ready);
+    const users = lobbyRoom.users.filter(user => user.state.ready);
     if (users.length > 1) {
-        broadcastGameStart(users);
+        const newGameRoom = {users: users};
+        gameRooms.rooms.push(newGameRoom);
+        broadcastGameStart(newGameRoom);
     }
 }
 
@@ -103,7 +113,7 @@ const onUserMessageHandler = (user: User) => {
             } else if (msg.action == MessageAction.CREATE && msg.target == ActionTarget.USER) {
                 broadcastUserUpdate(registerUser(user, msg.value), MessageAction.CREATE);
             } else if (msg.action == MessageAction.UPDATE && msg.target == ActionTarget.USERSTATE) {
-                room.users[room.users.findIndex((u => u.id == user.id))] = {
+                lobbyRoom.users[lobbyRoom.users.findIndex((u => u.id == user.id))] = {
                     ...user,
                     state: msg.value
                 }
@@ -121,16 +131,16 @@ const registerUser = (user: User, payload: UserPayload) => {
 };
 
 const removeUser = (user: User) => {
-    for (let i = room.users.length; i >= 0; i--) {
-        if (room.users[i] === user) {
-            room.users.splice(i, 1);
+    for (let i = lobbyRoom.users.length; i >= 0; i--) {
+        if (lobbyRoom.users[i] === user) {
+            lobbyRoom.users.splice(i, 1);
         }
     }
 };
 
 const sendMessageToAllUsers = (message: string) => {
-    for (let i = 0; i < room.users.length; i++) {
-        room.users[i].socket.send(message);
+    for (let i = 0; i < lobbyRoom.users.length; i++) {
+        lobbyRoom.users[i].socket.send(message);
     }
 };
 
