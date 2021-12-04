@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './App.css';
+import '../../App.css';
 import './WelcomeScreen.css';
 import './LobbyScreen.css';
 import {InputTextarea} from "primereact/inputtextarea";
@@ -22,7 +22,7 @@ function LobbyScreen(props) {
         }
     }
 
-    function setReadyState(checked: boolean) {
+    function setReadyState(checked) {
         props.websocket.setReadyState(checked);
         setReady(checked);
     }

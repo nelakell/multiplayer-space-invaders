@@ -1,8 +1,8 @@
-import {ActionTarget, MessageAction, stringifyMessage} from "./App";
+import {ActionTarget, MessageAction, stringifyMessage} from "../App";
 
 class Websocket {
 
-    socket: WebSocket;
+    socket;
     onGameStart;
 
     constructor(onGameStartHandler) {
@@ -44,7 +44,7 @@ class Websocket {
         };
     }
 
-    register(name: string, fighter: string) {
+    register(name, fighter) {
         return () => {
             this.socket.send(stringifyMessage(MessageAction.CREATE, ActionTarget.USER, {
                 name: name,
@@ -54,11 +54,11 @@ class Websocket {
         };
     }
 
-    sendChatMessage(message: string) {
+    sendChatMessage(message) {
         this.socket.send(stringifyMessage(MessageAction.MESSAGE, ActionTarget.CHAT, message));
     }
 
-    setReadyState(ready: boolean) {
+    setReadyState(ready) {
         this.socket.send(stringifyMessage(MessageAction.UPDATE, ActionTarget.USERSTATE, {ready: ready}));
     }
 

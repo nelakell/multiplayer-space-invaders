@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import './App.css';
+import '../../App.css';
 import './WelcomeScreen.css';
 import {useTranslation} from "react-i18next";
 import {Button} from 'primereact/button';

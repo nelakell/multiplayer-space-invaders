@@ -1,3 +1,66 @@
+@import "./screen/Game/GameScreen.css";
+@import "./screen/Onboarding/LobbyScreen.css";
+@import "./screen/Onboarding/WelcomeScreen.css";
+@import "./component/Invader/Invader.css";
+@import "./component/Hero/Hero.css";
+@import "./component/Laser/Laser.css";
+
+
+body {
+    height: 100vh;
+    padding: 0;
+    overflow: hidden;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+header {
+    text-align: center;
+    background: #370a42;
+    color: #a672ba;
+    padding: 10px;
+}
+
+footer {
+    text-align: center;
+    background: #370a42;
+    color: #a672ba;
+    padding: 10px;
+    font-size: 11px;
+}
+
+.window-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.game-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #370a42;
+}
+
+@keyframes scroll-background {
+    from {
+        background-position-y: 0;
+    }
+    to {
+        background-position-y: 256px;
+    }
+}
+
 .App {
     text-align: center;
     background-color: #282c34;

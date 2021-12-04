@@ -1,11 +1,14 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import './App.css';
-import WelcomeScreen from "./WelcomeScreen";
-import LobbyScreen from "./LobbyScreen";
-import Websocket from "./Websocket";
-import GameScreen from "./GameScreen";
+import WelcomeScreen from "./screen/Onboarding/WelcomeScreen";
+import LobbyScreen from "./screen/Onboarding/LobbyScreen";
+import Websocket from "./util/Websocket";
+import GameScreen from "./screen/Game/GameScreen";
+import {GAME_HEIGHT, GAME_WIDTH, HERO_WIDTH} from "./constants";
 
 function App() {
+
+    const startTime = Date.now()
 
     const [user, setUser] = useState({
         socket: {},
@@ -19,6 +22,8 @@ function App() {
         battle: false,
         score: false
     });
+
+    const [score, setScore] = useState(0)
 
     const room = {
         users: [] as User[]
@@ -51,11 +56,23 @@ function App() {
         });
     }
 
+    const gameOverHandler = (score: number) => {
+        setScore(score);
+        setScreens(() => {
+            return {
+                start: false,
+                lobby: false,
+                battle: false,
+                score: true
+            }
+        })
+    }
+
     return (
         <div className="App">
             {screens.start && <WelcomeScreen onRegistrationHandler={onRegistrationHandler}/>}
             {screens.lobby && <LobbyScreen websocket={user.socket} room={room} onGameStart={onGameStartHandler}/>}
-            {screens.battle && <GameScreen/>}
+            {screens.battle && <GameScreen startTime={startTime} onGameOver={gameOverHandler}/>}
         </div>
     );
 }

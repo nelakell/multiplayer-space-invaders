@@ -11,15 +11,15 @@ input[type="text"], textarea {
 }
 
 .red {
-    background-image: url(./res/kenney/PNG/playerShip1_red.png);
+    background-image: url(../../res/kenney/PNG/playerShip1_red.png);
 }
 
 .blue {
-    background-image: url(./res/kenney/PNG/playerShip1_blue.png);
+    background-image: url(../../res/kenney/PNG/playerShip1_blue.png);
 }
 
 .green {
-    background-image: url(./res/kenney/PNG/playerShip1_green.png);
+    background-image: url(../../res/kenney/PNG/playerShip1_green.png);
 }
 
 .fighter-card {

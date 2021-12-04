@@ -1,0 +1,18 @@
+.hero {
+    position: absolute;
+}
+
+.spaceship {
+    position: absolute;
+}
+
+.spaceshipImg {
+    width: 40px;
+    height: 30px;
+}
+
+.damagemodel {
+    position: absolute;
+    width: 40px;
+    height: 30px;
+}

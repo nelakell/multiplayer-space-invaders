@@ -11,7 +11,7 @@ MongoDB persistiert werden, angezeigt.
 Die Variante von Space Invaders durchläuft während einer Runde drei Screens:
 * StartScreen: Eingabe des Spielernamens, Button um das Spiel zu starten.
 * BattleScreen: Das eigentliche Spiel welches so lange läuft wie der Hero (Benutzer) Leben übrig hat.
-* EndScreen: Anzeige der erreichten Score und Gesamtrangliste.
+* ScoreScreen: Anzeige der erreichten Score und Gesamtrangliste.
 
 # Komponenten des Spiels
 Die Komponenten des Spiels sind:

@@ -1,0 +1,16 @@
+@import "../../component/Hero/Hero.css";
+
+.game {
+    display: flex;
+    width: 800px;
+    height: 600px;
+    background: url('../../res/kenney/Backgrounds/darkPurple.png');
+    animation: scroll-background 5s linear infinite;
+}
+
+.battleinfo {
+    margin-left: auto;
+    margin-right: 5px;
+    color: #a672ba;
+    font-size: 100%;
+}
