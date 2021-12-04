@@ -217,9 +217,10 @@ function GameScreen(props) {
     return (
         <div className={'game'}>
             <Hero heroState={heroState}/>
-            <Invaders invaders={invaderState.invaders}
-                      lasers={invaderState.lasers}
-                      level={heroState.level}/>
+            {/* TODO enable invaders */}
+            {/*<Invaders invaders={invaderState.invaders}*/}
+            {/*          lasers={invaderState.lasers}*/}
+            {/*          level={heroState.level}/>*/}
             <GameScore score={heroState.score} lives={heroState.lives} level={heroState.level}/>
         </div>
     )
