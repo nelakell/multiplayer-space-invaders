@@ -4,11 +4,13 @@ class Websocket {
 
     socket;
     onGameStart;
+    onGameUpdate;
 
-    constructor(onGameStartHandler) {
+    constructor(onGameStartHandler, onGameUpdateHandler) {
         this.socket = new WebSocket("ws://localhost:8000");
         this.socket.onmessage = this.onMessageReceiveHandler();
         this.onGameStart = onGameStartHandler;
+        this.onGameUpdate = onGameUpdateHandler;
     }
 
     onMessageReceiveHandler() {
@@ -26,10 +28,20 @@ class Websocket {
                     case MessageAction.CREATE:
                         switch (message.target) {
                             case ActionTarget.GAME:
-                                this.onGameStart();
+                                this.onGameStart(message.value.playerStates);
                                 break;
                             case ActionTarget.USER:
                                 document.getElementById("chat-history").append(message.value.name + ": " + message.value.message + "\r");
+                                break;
+                            default:
+                                console.log("unknown message of action " + message.action + " and target " + message.target + " received.")
+                                break;
+                        }
+                        break;
+                    case MessageAction.UPDATE:
+                        switch (message.target) {
+                            case ActionTarget.GAME:
+                                this.onGameUpdate(message.value.playerStates);
                                 break;
                             default:
                                 console.log("unknown message of action " + message.action + " and target " + message.target + " received.")
@@ -58,8 +70,12 @@ class Websocket {
         this.socket.send(stringifyMessage(MessageAction.MESSAGE, ActionTarget.CHAT, message));
     }
 
+    sendHeroUpdateMessage(message){
+        this.socket.send(stringifyMessage(MessageAction.UPDATE, ActionTarget.GAME, message));
+    }
+
     setReadyState(ready) {
-        this.socket.send(stringifyMessage(MessageAction.UPDATE, ActionTarget.USERSTATE, {ready: ready}));
+        this.socket.send(stringifyMessage(MessageAction.UPDATE, ActionTarget.READYSTATE, ready));
     }
 
 }

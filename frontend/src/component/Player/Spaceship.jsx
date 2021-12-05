@@ -1,5 +1,5 @@
 import playerImg from '../../res/kenney/PNG/playerShip1_red.png';
-import './Hero.css'
+import './Player.css'
 
 
 const Spaceship = (props) => {

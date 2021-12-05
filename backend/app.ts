@@ -5,6 +5,16 @@ const server = new WebSocketServer({port: port});
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 600;
 const HERO_WIDTH = 40;
+const HERO_HEIGHT = 30;
+const HERO_SPEED = 3;
+
+export type KeyControl = {
+    leftKeyPressed: boolean,
+    rightKeyPressed: boolean,
+    upKeyPressed: boolean,
+    downKeyPressed: boolean,
+    spaceKeyPressed: boolean
+}
 
 export type User = {
     socket: any,
@@ -64,7 +74,7 @@ enum MessageAction {
 
 enum ActionTarget {
     USER = 'USER',
-    USERSTATE = 'USERSTATE',
+    READYSTATE = 'READYSTATE',
     CHAT = 'CHAT',
     GAME = 'GAME'
 }
@@ -116,11 +126,17 @@ function broadcastGameStart(gameRoom: GameRoom) {
 
 function launchGameHandler() {
     const users = lobbyRoom.users.filter(user => user.playerState.ready);
-    if (users.length > 1) {
+    if (users.length > 0) { // TODO set to 1
         const newGameRoom = {users: users};
         gameRooms.rooms.push(newGameRoom);
         broadcastGameStart(newGameRoom);
     }
+}
+
+function updateGameHandler(gameRoom: GameRoom) {
+    let playerStates: PlayerState[] = [];
+    gameRoom.users.forEach(u => playerStates.push(u.playerState));
+    sendMessageToGameUsers(gameRoom, stringifyMessage(MessageAction.UPDATE, ActionTarget.GAME, {playerStates: playerStates}));
 }
 
 const onUserMessageHandler = (user: User) => {
@@ -130,12 +146,26 @@ const onUserMessageHandler = (user: User) => {
                 broadcastChatMessage(user, msg);
             } else if (msg.action == MessageAction.CREATE && msg.target == ActionTarget.USER) {
                 broadcastUserUpdate(registerUser(user, msg.value), MessageAction.CREATE);
-            } else if (msg.action == MessageAction.UPDATE && msg.target == ActionTarget.USERSTATE) {
+            } else if (msg.action == MessageAction.UPDATE && msg.target == ActionTarget.READYSTATE) {
                 lobbyRoom.users[lobbyRoom.users.findIndex((u => u.id == user.id))] = {
                     ...user,
-                    playerState: msg.value
+                    playerState: {
+                        ...user.playerState,
+                        ready: msg.value
+                    }
                 }
                 launchGameHandler();
+            } else if (msg.action == MessageAction.UPDATE && msg.target == ActionTarget.GAME) {
+                console.log("debug")
+                let currentUser = lobbyRoom.users[lobbyRoom.users.findIndex((u => u.id == user.id))];
+                gameRooms.rooms[0].users[gameRooms.rooms[0].users.findIndex((u => u.id == user.id))] = {
+                    ...currentUser,
+                    playerState: {
+                        ...currentUser.playerState,
+                        gameState: movePlayer(currentUser.playerState.gameState, msg.value)
+                    }
+                }
+                updateGameHandler(gameRooms.rooms[0]);
             }
         }
     );
@@ -192,9 +222,180 @@ const sendMessageToGameUsers = (gameRoom: GameRoom, message: string) => {
     }
 };
 
+export function movePlayer(playerGameState: PlayerGameState, keyControl: KeyControl) {
+    let x = Number(playerGameState.xPos);
+    let y = Number(playerGameState.yPos);
+    if (keyControl.upKeyPressed) {
+        y -= HERO_SPEED;
+    }
+    if (keyControl.downKeyPressed) {
+        y += HERO_SPEED;
+    }
+    if (keyControl.leftKeyPressed) {
+        x -= HERO_SPEED;
+    }
+    if (keyControl.rightKeyPressed) {
+        x += HERO_SPEED;
+    }
+    return {
+        ...playerGameState,
+        xPos: ensureBoundaries(x, 0, GAME_WIDTH - HERO_WIDTH),
+        yPos: ensureBoundaries(y, 0, GAME_HEIGHT - HERO_HEIGHT)
+    }
+}
+
 function generateUserId() {
     return Math.floor(Math.random() * 1000000000);
 }
 
+export function ensureBoundaries(value: number, min: number, max: number) {
+    return Math.min(Math.max(value, min), max);
+}
+
 console.log("WebSocket server is running.");
 console.log("Listening to port " + port + ".");
+
+
+/*
+
+TODO integrate below frontend logik to backend
+
+
+    const [keyControl, setKeyControl] = useState({
+        init: true
+    });
+    const keyControlRef = useRef(keyControl);
+    keyControlRef.current = keyControl;
+
+
+    const [invaderState, setInvaderState] = useState({
+        invaders: [],
+        lasers: [],
+        bonus: [],
+        spawning_cooldown: 0
+    })
+    const invaderStateRef = useRef(invaderState);
+    invaderStateRef.current = invaderState;
+
+
+
+const updateHeroState = (heroState, keyControl) => {
+        const time = Date.now();
+        const updatedHeroState = moveHero(heroState, keyControl);
+        const shootEvent = () => {
+            return keyControl.shootKeyPressed && time - heroState.lastShot > 1000;
+        }
+
+        let lasers = updateLasers(heroState.lasers);
+        if (shootEvent()) {
+            lasers.push(shoot(heroState.xPos, heroState.yPos));
+        }
+
+        updatedHeroState.lasers = lasers;
+        updatedHeroState.lastShot = shootEvent() ? time : heroState.lastShot;
+        updatedHeroState.level = Math.floor((Date.now() - props.startTime) / 6000);
+        console.log(Math.floor((Date.now() - Number(props.startTime)) / 6000 + 1))
+        props.socket.sendHeroUpdateMessage(updatedHeroState);
+    }
+
+    const updateInvadersState = invaderState => {
+        let invaders = []
+        let lasers = updateLasers(invaderState.lasers)
+        for (let i = 0; i < invaderState.invaders.length; i++) {
+            let invader = invaderState.invaders[i];
+            invaders[i] = moveInvader(invader, invaderState.invaders)
+            if (invaderHasReloaded()) {
+                lasers.push(shot(lasers, invader.xPos, invader.yPos))
+            }
+        }
+
+        let cooldown = Number(invaderState.spawning_cooldown);
+        if (invaderState.invaders.length < 3 * heroStateRef.current.level && invaderState.spawning_cooldown <= 0) {
+            invaders.push(spawnInvader());
+            cooldown = 3000;
+        } else {
+            cooldown -= 20;
+        }
+
+        setInvaderState(prevState => {
+            return {
+                ...prevState,
+                invaders: invaders,
+                // bonus: updateBonus(invaderState.lasers),
+                lasers: lasers,
+                spawning_cooldown: cooldown
+            }
+        });
+    }
+
+    const updateStates = () => {
+        updateHeroState(heroStateRef.current, keyControlRef.current);
+        updateInvadersState(invaderStateRef.current);
+        if (heroState.lives === 0) {
+            props.onGameOver(heroStateRef.current.score);
+        }
+    }
+
+    const updateCollisions = () => {
+        let {
+            remainingHeroLasers,
+            remainingInvaders
+        } = detectHeroHitsInvader(heroStateRef.current, invaderStateRef.current.invaders) || {};
+
+        if (remainingInvaders !== undefined && invaderStateRef.current.invaders.length !== remainingInvaders.length) {
+            setHeroState(prevState => {
+                return {
+                    ...prevState,
+                    score: prevState.score += 50
+                }
+            });
+            setInvaderState(prevState => {
+                return {
+                    ...prevState,
+                    invaders: remainingInvaders
+                }
+            });
+        }
+        if (remainingHeroLasers !== undefined && heroStateRef.current.lasers.length !== remainingHeroLasers.lasers) {
+            setHeroState(prevState => {
+                return {
+                    ...prevState,
+                    lasers: remainingHeroLasers
+                }
+            });
+        }
+    }
+
+    const updateHeroCollisions = () => {
+        let {
+            remainingHeroLives,
+            remainingInvadersLasers
+        } = detectInvaderHitsHero(heroStateRef.current, invaderStateRef.current.lasers) || {};
+
+        if (remainingInvadersLasers !== undefined && invaderStateRef.current.lasers.length !== remainingInvadersLasers.length) {
+            setInvaderState(prevState => {
+                return {
+                    ...prevState,
+                    lasers: remainingInvadersLasers
+                }
+            });
+        }
+        if (remainingHeroLives !== undefined && heroStateRef.current.lives !== remainingHeroLives) {
+            setHeroState(prevState => {
+                return {
+                    ...prevState,
+                    lives: remainingHeroLives
+                }
+            });
+        }
+    }
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            updateStates();
+            updateCollisions();
+            updateHeroCollisions();
+        }, 10);
+        return () => clearTimeout(timer);
+    });
+ */

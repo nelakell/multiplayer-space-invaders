@@ -6,7 +6,7 @@
   "scripts": {
     "build": "ttsc",
     "clean": "rimraf ./dist/* node_modules",
-    "start": "node ./dist/app.js",
+    "start": "ttsc && node ./dist/app.js",
     "watch": "rimraf lib/* lib-esm/* && ttsc --watch"
   },
   "author": "",

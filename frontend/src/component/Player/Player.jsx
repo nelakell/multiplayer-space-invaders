@@ -1,7 +1,6 @@
-import './Hero.css';
+import './Player.css';
 import Spaceship from "./Spaceship";
 import DamageModel from "./DamageModel";
-import Lasers from "../Laser/Lasers";
 import {
     GAME_HEIGHT,
     GAME_WIDTH,
@@ -16,16 +15,17 @@ import {
 import {createKey, ensureBoundaries, rectsIntersect} from "../../util/game";
 
 
-const Hero = props => {
+const Player = props => {
     console.log("hero")
     console.log(props)
     return (
         <div>
             <div className={"hero"}>
-                <Spaceship xPos={props.heroState.xPos} yPos={props.heroState.yPos}/>
-                <DamageModel xPos={props.heroState.xPos} yPos={props.heroState.yPos} lives={props.heroState.lives}/>
+                <Spaceship xPos={props.playerState.gameState.xPos} yPos={props.playerState.gameState.yPos}/>
+                <DamageModel xPos={props.playerState.gameState.xPos} yPos={props.playerState.gameState.yPos}
+                             lives={props.playerState.gameState.lives}/>
             </div>
-            <Lasers items={props.heroState.lasers}/>
+            {/*<Lasers items={props.heroState.lasers}/>*/} TODO
         </div>
     )
 }
@@ -75,28 +75,6 @@ export function detectHeroHitsInvader(hero, invaders) {
     };
 }
 
-export function moveHero(hero, keyControl) {
-    let x = Number(hero.xPos);
-    let y = Number(hero.yPos);
-    if (keyControl.upKeyPressed) {
-        y -= HERO_SPEED;
-    }
-    if (keyControl.downKeyPressed) {
-        y += HERO_SPEED;
-    }
-    if (keyControl.leftKeyPressed) {
-        x -= HERO_SPEED;
-    }
-    if (keyControl.rightKeyPressed) {
-        x += HERO_SPEED;
-    }
-    return {
-        ...hero,
-        xPos: ensureBoundaries(x, 0, GAME_WIDTH - HERO_WIDTH),
-        yPos: ensureBoundaries(y, 0, GAME_HEIGHT - HERO_HEIGHT)
-    }
-}
-
 export function shoot(x, y) {
     return {
         key: 'hero_shot_' + createKey() + createKey(),
@@ -106,4 +84,4 @@ export function shoot(x, y) {
     }
 }
 
-export default Hero;
+export default Player;

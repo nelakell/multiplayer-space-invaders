@@ -1,4 +1,4 @@
-import './Hero.css'
+import './Player.css'
 
 import DMG_MODEL_2 from '../../res/kenney/PNG/Damage/playerShip1_damage2.png'
 import DMG_MODEL_3 from '../../res/kenney/PNG/Damage/playerShip1_damage3.png'

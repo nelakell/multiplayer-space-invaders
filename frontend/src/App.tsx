@@ -1,19 +1,18 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import WelcomeScreen from "./screen/Onboarding/WelcomeScreen";
 import LobbyScreen from "./screen/Onboarding/LobbyScreen";
 import Websocket from "./util/Websocket";
 import GameScreen from "./screen/Game/GameScreen";
-import {GAME_HEIGHT, GAME_WIDTH, HERO_WIDTH} from "./constants";
 
 function App() {
 
     const startTime = Date.now()
 
-    const [user, setUser] = useState({
+    const [localUser, setLocalUser] = useState({
         socket: {},
         name: '',
-        fighter: ''
+        fighter: '',
     });
 
     const [screens, setScreens] = useState({
@@ -24,15 +23,12 @@ function App() {
     });
 
     const [score, setScore] = useState(0)
-
-    const room = {
-        users: [] as User[]
-    };
+    const [gameRoom, setGameRoom] = useState([] as GameRoom)
 
     const onRegistrationHandler = (name: string, fighter: string) => {
-        const websocket = new Websocket(onGameStartHandler);
+        const websocket = new Websocket(onGameStartHandler, onGameUpdateHandler);
         websocket.socket.onopen = websocket.register(name, fighter);
-        setUser({
+        setLocalUser({
             socket: websocket,
             name: name,
             fighter: fighter
@@ -45,8 +41,9 @@ function App() {
         });
     }
 
-    const onGameStartHandler = () => {
+    const onGameStartHandler = (gameRoom: GameRoom) => {
         debugger
+        setGameRoom(gameRoom);
         console.log("start game ..");
         setScreens({
             start: false,
@@ -54,6 +51,10 @@ function App() {
             battle: true,
             score: false
         });
+    }
+
+    const onGameUpdateHandler = (gameRoom: GameRoom) => {
+        setGameRoom(gameRoom);
     }
 
     const gameOverHandler = (score: number) => {
@@ -68,22 +69,48 @@ function App() {
         })
     }
 
+    function getHeroPlayerState() {
+        return gameRoom.filter(playerState => playerState.name === localUser.name)[0];
+    }
+
+    function getOpponentPlayerState() {
+        return gameRoom.filter(playerState => playerState.name !== localUser.name)[0];
+    }
+
     return (
         <div className="App">
             {screens.start && <WelcomeScreen onRegistrationHandler={onRegistrationHandler}/>}
-            {screens.lobby && <LobbyScreen websocket={user.socket} room={room} onGameStart={onGameStartHandler}/>}
-            {screens.battle && <GameScreen startTime={startTime} onGameOver={gameOverHandler}/>}
+            {screens.lobby && <LobbyScreen websocket={localUser.socket}/>}
+            {screens.battle &&
+                <GameScreen startTime={startTime}
+                            socket={localUser.socket}
+                            heroState={getHeroPlayerState()}
+                            opponentState={getOpponentPlayerState()}
+                            onGameOver={gameOverHandler}/>}
         </div>
     );
 }
 
-export type User = {
-    socket: any,
-    id: number,
+export type GameRoom = PlayerState[];
+
+export type PlayerState = {
     name: string,
     fighter: string,
-    language: string
-};
+    language: string,
+    ready: boolean,
+    gameState: PlayerGameState
+}
+
+export type PlayerGameState = {
+    xPos: number,
+    yPos: number,
+    lasers: any,
+    bonus: any,
+    score: number,
+    lives: number,
+    level: number,
+    lastShot: number
+}
 
 export type Message = {
     action: MessageAction,
@@ -100,7 +127,7 @@ export enum MessageAction {
 
 export enum ActionTarget {
     USER = 'USER',
-    USERSTATE = 'USERSTATE',
+    READYSTATE = 'READYSTATE',
     CHAT = 'CHAT',
     GAME = 'GAME',
 }

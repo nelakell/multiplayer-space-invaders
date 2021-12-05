@@ -1,9 +1,24 @@
-type User = {
+export type User = {
     socket: any,
     id: number,
-    name: string,
-    fighter: string,
-    language: string
+    playerState: PlayerState
 };
 
-export default User;
+export type PlayerState = {
+    name: string,
+    fighter: string,
+    language: string,
+    ready: boolean,
+    gameState: PlayerGameState
+}
+
+export type PlayerGameState = {
+    xPos: number,
+    yPos: number,
+    lasers: any,
+    bonus: any,
+    score: number,
+    lives: number,
+    level: number,
+    lastShot: number
+}
