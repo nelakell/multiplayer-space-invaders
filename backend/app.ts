@@ -2,21 +2,37 @@ const port = 8000;
 const WebSocketServer = require('ws').Server;
 const server = new WebSocketServer({port: port});
 
+const GAME_WIDTH = 800;
+const GAME_HEIGHT = 600;
+const HERO_WIDTH = 40;
+
 export type User = {
     socket: any,
     id: number,
-    name: string,
-    fighter: string,
-    language: string,
-    state: UserState
+    playerState: PlayerState
 };
 
 export type GameRoom = {
     users: User[];
 };
 
-export type UserState = {
+export type PlayerState = {
+    name: string,
+    fighter: string,
+    language: string,
     ready: boolean,
+    gameState: PlayerGameState
+}
+
+export type PlayerGameState = {
+    xPos: number,
+    yPos: number,
+    lasers: any,
+    bonus: any,
+    score: number,
+    lives: number,
+    level: number,
+    lastShot: number
 }
 
 export const lobbyRoom = {
@@ -72,32 +88,34 @@ const addUser = (user: User) => {
 };
 
 function broadcastChatMessage(user: User, msg: Message) {
-    sendMessageToAllUsers(stringifyMessage(MessageAction.MESSAGE, ActionTarget.CHAT, {
-        'name': user.name,
+    sendMessageToLobbyUsers(stringifyMessage(MessageAction.MESSAGE, ActionTarget.CHAT, {
+        'name': user.playerState.name,
         'message': msg.value
     }));
 }
 
 function broadcastUserUpdate(user: User, action: MessageAction) {
     if (MessageAction.CREATE === action) {
-        sendMessageToAllUsers(stringifyMessage(action, ActionTarget.USER, {
+        sendMessageToLobbyUsers(stringifyMessage(action, ActionTarget.USER, {
             name: 'info',
-            message: "Welcome player '" + user.name + "', joining the party for team " + user.fighter + ". Total connections: " + lobbyRoom.users.length
+            message: "Welcome player '" + user.playerState.name + "', joining the party for team " + user.playerState.fighter + ". Total connections: " + lobbyRoom.users.length
         }));
     } else if (MessageAction.DELETE === action) {
-        sendMessageToAllUsers(stringifyMessage(action, ActionTarget.USER, {
+        sendMessageToLobbyUsers(stringifyMessage(action, ActionTarget.USER, {
             name: 'info',
-            message: user.name + " has left the lobby. Total connections: " + lobbyRoom.users.length
+            message: user.playerState.name + " has left the lobby. Total connections: " + lobbyRoom.users.length
         }));
     }
 }
 
 function broadcastGameStart(gameRoom: GameRoom) {
-    sendMessageToSpecificUsers(gameRoom.users, stringifyMessage(MessageAction.CREATE, ActionTarget.GAME, {}));
+    let playerStates: PlayerState[] = [];
+    gameRoom.users.forEach(u => playerStates.push(u.playerState));
+    sendMessageToGameUsers(gameRoom, stringifyMessage(MessageAction.CREATE, ActionTarget.GAME, {playerStates: playerStates}));
 }
 
 function launchGameHandler() {
-    const users = lobbyRoom.users.filter(user => user.state.ready);
+    const users = lobbyRoom.users.filter(user => user.playerState.ready);
     if (users.length > 1) {
         const newGameRoom = {users: users};
         gameRooms.rooms.push(newGameRoom);
@@ -115,7 +133,7 @@ const onUserMessageHandler = (user: User) => {
             } else if (msg.action == MessageAction.UPDATE && msg.target == ActionTarget.USERSTATE) {
                 lobbyRoom.users[lobbyRoom.users.findIndex((u => u.id == user.id))] = {
                     ...user,
-                    state: msg.value
+                    playerState: msg.value
                 }
                 launchGameHandler();
             }
@@ -123,10 +141,34 @@ const onUserMessageHandler = (user: User) => {
     );
 };
 
+server.on('connection', function (socket: any) {
+    const user = {
+        socket: socket,
+        id: generateUserId(),
+        playerState: {
+            name: '',
+            fighter: '',
+            language: '',
+            ready: false,
+            gameState: {
+                xPos: GAME_WIDTH / 2 - HERO_WIDTH / 2,
+                yPos: GAME_HEIGHT - 50,
+                lasers: [],
+                bonus: [],
+                score: 0,
+                lives: 3,
+                level: 1,
+                lastShot: 0
+            }
+        }
+    };
+    addUser(user);
+});
+
 const registerUser = (user: User, payload: UserPayload) => {
-    user.name = payload.name;
-    user.fighter = payload.fighter;
-    user.language = payload.language;
+    user.playerState.name = payload.name;
+    user.playerState.fighter = payload.fighter;
+    user.playerState.language = payload.language;
     return user;
 };
 
@@ -138,35 +180,21 @@ const removeUser = (user: User) => {
     }
 };
 
-const sendMessageToAllUsers = (message: string) => {
+const sendMessageToLobbyUsers = (message: string) => {
     for (let i = 0; i < lobbyRoom.users.length; i++) {
         lobbyRoom.users[i].socket.send(message);
     }
 };
 
-const sendMessageToSpecificUsers = (users: User[], message: string) => {
-    for (let i = 0; i < users.length; i++) {
-        users[i].socket.send(message);
+const sendMessageToGameUsers = (gameRoom: GameRoom, message: string) => {
+    for (let i = 0; i < gameRoom.users.length; i++) {
+        gameRoom.users[i].socket.send(message);
     }
 };
 
 function generateUserId() {
     return Math.floor(Math.random() * 1000000000);
 }
-
-server.on('connection', function (socket: any) {
-    const user = {
-        socket: socket,
-        id: generateUserId(),
-        name: '',
-        fighter: '',
-        language: '',
-        state: {
-            ready: false
-        }
-    };
-    addUser(user);
-});
 
 console.log("WebSocket server is running.");
 console.log("Listening to port " + port + ".");
